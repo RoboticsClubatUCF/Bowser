@@ -2,7 +2,9 @@
 2. Install ROS Kinetic by following http://wiki.ros.org/kinetic/Installation/Ubuntu
 3. Open the terminal and copy repository on your computer's catkin workspace source folder with
 	```~/catkin_ws/src$ git clone https://github.com/chickenfromouterspace/igvc2019_lidar.git```
-4. Install dependencies ```$ rosdep install igvc2019_lidar```
+4. Go to your catkin workspace and make your packages with
+	```~/catkin_ws$ catkin_make```
+5. Install dependencies ```$ rosdep install igvc2019_lidar```
 	1. If this fails, take the following actions for each package not installed.
 	2. Follow Velodyne Puck tutorial at http://wiki.ros.org/velodyne/Tutorials/Getting%20Started%20with%20the%20Velodyne%20VLP16
 		1. As a warning, some IP configuration commands are incorrect. Ensure that your input and output ip addresses are the same.
@@ -14,8 +16,6 @@
 		```$ sudo apt-get install ros-kinetic-navigation```
 	6. Use apt-get to install the ros-kinetic-robot-pose-ekf package.
 		```$ sudo apt-get install ros-kinetic-robot-pose-ekf```
-5. Go to your catkin workspace and make your packages with
-	```~/catkin_ws$ catkin_make```
 6. Update your links in your catkin workspace by using ```~/catkin_ws$ source ./devel/setup.bash```
 7. Connect Velodyne VLP16 Puck and IMU VN-100T to your computer properly.
 	1. If this fails install and debug using Wireshark to ensure you weren't screwed by the Velodyne VLP16 tutorial.
