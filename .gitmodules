@@ -4,3 +4,6 @@
 [submodule "add"]
 	path = add
 	url = https://github.com/chickenfromouterspace/Bowser.git
+[submodule "igvc2019_lidar"]
+	path = igvc2019_lidar
+	url = https://github.com/chickenfromouterspace/igvc2019_lidar.git
