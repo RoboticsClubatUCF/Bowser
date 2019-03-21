@@ -1,0 +1,8 @@
+1. Connect the Imu VN 100 properly. Make sure that funky pin connector is actually fully inserted into the IMU and that your USB at least flashed green once.
+2. Launch the IMU using ```$ roslaunch igvc2019_lidar vn_100_cont.launch``` If this concludes with the line "Setting Imu Rate to 100" without errors or timeouts, you are good. If not take the substeps for each various issue.
+	1. If you get timeouts, it most likely means your IMU isn't being read in the first place. Use ```$ sudo stty -F /dev/ttyUSB0 921600``` to set your USB port to the recommended baudrate. Check your baudrate using ```$ stty -F /dev/ttyUSB0```
+	2. If permisson is denied, you may have accidentally opened the launch file in the imu_vn_100 package. We created our own launch file for a reason you know. That being aligning the sync rate and the imu rate, enabling roll-pitch-yaw, and setting the binary async mode to serial port 1.
+		1. If even these settings don't work with your computer, edit the igvc2019_lidar/launch/vn_100_cont.launch file and change the binary async mode value to 1, 2, or 3.
+		2. Try changing the imu rate and sync rate. Though its recommended to keep them equivalent.
+		3. Try changing the baudrate to 115200 or 921600 as both are supported for some reason. 921600 is recommended obviously for its higher speed.
+3. If even after all of this nothing works, troubleshoot on your own and post your solution on the issues section if you find one. While this may seem a bit dodgey, we aren't in any way, shape, or form associated with Vectornav's development. So, we really don't have any other answers beyond what is here.
