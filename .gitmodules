@@ -1,0 +1,3 @@
+[submodule "igvc2019_navigation"]
+	path = igvc2019_navigation
+	url = https://github.com/chickenfromouterspace/igvc2019_navigation.git
