@@ -48,7 +48,7 @@ Uses ROS and depends on packages robot_pose_ekf from navigation, imu_vn_100, sla
 8. Open the first node in ROS with ```$ roscore```
 9. In a new terminal, Ctrl-Shift-T, launch everything with
 	```console
-	your@terminal:~$ roslaunch igvc2019_lidar start.launch
+	your@terminal:~$ roslaunch igvc2019_navigation start.launch
 	```
 	1. If this fails, go through at the steps above again and refer to their troubleshooting solutions.
 	2. If their troubleshooting solutions don't solve your problem, make sure you are using Ubuntu 16.04 and ROS Kinetic. Any questions about other distributions will not be addressed.

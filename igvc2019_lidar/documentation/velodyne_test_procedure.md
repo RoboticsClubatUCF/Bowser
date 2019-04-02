@@ -6,7 +6,7 @@
 6. Capture your ethernet connection. Don't know what it is? Check out ``` $ ifconfig``` and use the ethernet with Mask:255.255.255.0   
 	![ifconfig](https://raw.githubusercontent.com/chickenfromouterspace/igvc2019_lidar/master/documentation/ifconfig.png)
 7. In step 1.2, change 192.168.3.100 to 192.168.1.100.
-8. Also in step 1.2, change eth0 to the ethernet code shown in the ifconfig ex. enp5s0
+8. Also in step 1.2, change eth0 to the ethernet code shown in the ifconfig e.g. enp5s0
 10. ```$ sudo route add 192.168.XX.YY eth0``` Change 192.168.XX.YY to 192.168.1.201 and eth0 to your ethernet code.
 11. Wireshark should be showing a lot of blue messages.
 	1. Source should be 192.168.1.201
