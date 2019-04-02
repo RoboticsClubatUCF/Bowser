@@ -29,7 +29,7 @@ class IMU:
 	            					 tf.transformations.quaternion_from_euler(0, 0, self.orientation.z),
 	            					 rospy.Time.now(),
 	            					 "imu",
-	            					 "odom_combined")
+	            					 "base_footprint")
 
 if __name__ == '__main__':
 	rospy.init_node('imu_covariance')
