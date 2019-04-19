@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(igvc2019_lidar)
+project(igvc2019_navigation)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -8,9 +8,7 @@ project(igvc2019_lidar)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  rospy
-  tf
+  igvc2019_lidar
 )
 
 ## System dependencies are found with CMake's conventions
@@ -104,8 +102,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES igvc2019_lidar
-#  CATKIN_DEPENDS roscpp rospy tf
+#  LIBRARIES igvc2019_navigation
+#  CATKIN_DEPENDS igvc2019_lidar
 #  DEPENDS system_lib
 )
 
@@ -122,7 +120,7 @@ include_directories(
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/igvc2019_lidar.cpp
+#   src/${PROJECT_NAME}/igvc2019_navigation.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -133,7 +131,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/igvc2019_lidar_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/igvc2019_navigation_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -190,19 +188,10 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_igvc2019_lidar.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_igvc2019_navigation.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
-
-add_executable(puck_laser_listener nodes/puck_laser_listener.cpp)
-add_executable(vector_to_odom src/vector_to_odom.cpp)
-add_executable(tf_broadcaster src/tf_broadcaster.cpp)
-add_executable(tf_listener src/tf_listener.cpp)
-target_link_libraries(puck_laser_listener ${catkin_LIBRARIES})
-target_link_libraries(vector_to_odom ${catkin_LIBRARIES})
-target_link_libraries(tf_broadcaster ${catkin_LIBRARIES})
-target_link_libraries(tf_listener ${catkin_LIBRARIES})

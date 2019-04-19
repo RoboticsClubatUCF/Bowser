@@ -2,41 +2,33 @@
 	<!-- Setting parameters, use spaces not tabs -->
 	<rosparam>
       covariance: 0.01
-      imu_topic: imu/imu
+      imu_topic: an_device/Imu
     </rosparam>
 
 	<!-- Target Frame Launch -->
     <node pkg="tf" type="static_transform_publisher" name="velodyne_frame" args="0 0 0 0 0 0 base_link velodyne 100"/>
     <node pkg="tf" type="static_transform_publisher" name="base_frame" args="0 0 0 0 0 0 odom base_link 100"/>
     <node pkg="tf" type="static_transform_publisher" name="ekf_frame" args="0 0 0 0 0 0 odom odom_combined 100"/>
-
-	<!-- EKF -->
-	<node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf">
-    <param name="output_frame" value="odom_combined"/>
-    <param name="freq" value="30.0"/>
-    <param name="sensor_timeout" value="1.0"/>
-    <param name="odom_used" value="false"/>
-    <param name="imu_used" value="true"/>
-    <param name="vo_used" value="false"/>
-    <param name="debug" value="true"/>
-    <param name="self_diagnose" value="true"/>
-    <param name="gps_used" value="false"/>
-  </node>
-
-	<!-- imu-vn100 launch -->
-		<include file="$(find igvc2019_lidar)/launch/vn_100_cont.launch" />
-
-	<!-- imu covariance matrix -->
-		<node name="imu_covariance" type="imu_covariance.py" pkg="igvc2019_lidar"/>
+    <node pkg="tf" type="static_transform_publisher" name="gps_frame" args="0 0 0 0 0 0 odom gps 100"/>
+    
+    
 
 	<!-- Velodyne VLP16 Puck Launch -->
 		<include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch" />
+        
+    <!-- GPS IMU Launch -->
+        <include file ="$(find igvc2019_navigation)/launch/gps_imu.launch"/>
+
+    <!-- IMU Covariance -->
+        <node pkg ="igvc2019_lidar" type = "imu_covariance.py" name ="imu_covariance"/>
 
 	<!-- SLAM gmapping -->
 		<node name="slam_gmapping" type="slam_gmapping" pkg="gmapping" output="screen">
 		<param name="scan" value="/scan"/>
 		<param name="linearUpdate" value="0.0"/>
-		<param name="angularUpdate" value="0.0"/>
+		<param name="angularUpdate" value="0.5"/>
+        <param name= "map_update_interval" value = "4"/>
+        <param name= "minimumScore" value = "300"/>  
 	</node>
 
 	<!-- Debugging Utilities -->

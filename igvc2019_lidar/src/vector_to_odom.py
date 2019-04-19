@@ -7,27 +7,45 @@ import rospy
 import tf
 import tf2_ros
 import tf2_geometry_msgs
+from sensor_msgs.msg import Imu
 from nav_msgs.msg import Odometry
 from std_msgs.msg import Header
 from geometry_msgs.msg import Point, Pose, PoseWithCovariance, Quaternion, Twist, Vector3, Vector3Stamped
+
+imu_topic = rospy.get_param("imu_topic", "imu/imu")
 
 class RPY:
         def __init__(self, rpy_topic="imu/rpy"):
             # Subscribe to the laser scan topic
             rpy_sub = rospy.Subscriber(rpy_topic, Vector3Stamped, self.on_rpy)
+            self.vector = Vector3(0,0,0)
+            self.timestamp = rospy.Time.now()
 
         def on_rpy(self, rpy):
             self.vector = rpy.vector
             self.timestamp = rpy.header.stamp
-            print(self.timestamp)
-            # first, we'll publish the transform over tf
-            odom_broadcaster.sendTransform(
-                (self.vector.x, self.vector.y, 0.),
-                odom_quat,
-                self.timestamp,
-                "base_link",
-                "odom"
-            )
+
+class IMU:
+        def __init__(self, imu_topic=imu_topic):
+            # Subscribe to the laser scan topic
+            imu_sub = rospy.Subscriber(imu_topic, Imu, self.imu_loop)
+            self.tf_imu = tf.TransformBroadcaster()
+            self.header = Header(0, rospy.Time.now(), "imu")
+            self.orientation = Quaternion(0,0,0,0)
+            self.angular_velocity = Vector3(0,0,0)
+            self.linear_acceleration = Vector3(0,0,0)
+
+        def imu_loop(self, imu):
+            if not rospy.core.is_shutdown():
+                self.header = imu.header
+                self.orientation = imu.orientation
+                self.angular_velocity = imu.angular_velocity
+                self.linear_acceleration = imu.linear_acceleration
+                self.tf_imu.sendTransform((self.orientation.x, self.orientation.y, 0), 
+                                     tf.transformations.quaternion_from_euler(0, 0, self.orientation.z),
+                                     rospy.Time.now(),
+                                     "imu",
+                                     "odom_combined")
 
 if __name__ == '__main__':
 
@@ -36,14 +54,7 @@ if __name__ == '__main__':
     odom_pub = rospy.Publisher("odom", Odometry, queue_size=50)
     odom_broadcaster = tf.TransformBroadcaster()
     rpy = RPY()
-
-    x = 0.0
-    y = 0.0
-    th = 0.0
-
-    vx = 0.1
-    vy = -0.1
-    vth = 0.1
+    imu = IMU()
 
     infinity = float('inf')
 
@@ -54,16 +65,21 @@ if __name__ == '__main__':
     r = rospy.Rate(1.0)
     while not rospy.is_shutdown():
         current_time = rospy.Time.now()
+        orientation = imu.orientation
+        angular_velocity = imu.angular_velocity
+        rpy_data = rpy.vector
 
-        # compute odometry in a typical way given the velocities of the robot
-        dt = (current_time - last_time).to_sec()
-        delta_x = (vx * cos(th) - vy * sin(th)) * dt
-        delta_y = (vx * sin(th) + vy * cos(th)) * dt
-        delta_th = vth * dt
+        roll = rpy_data.x
+        pitch = rpy_data.y
+        yaw = rpy_data.z
 
-        x += delta_x
-        y += delta_y
-        th += delta_th
+        x = orientation.x
+        y = orientation.y
+        th = yaw
+
+        vx = angular_velocity.x
+        vy = angular_velocity.y
+        vth = angular_velocity.z
 
         # since all odometry is 6DOF we'll need a quaternion created from yaw
         odom_quat = tf.transformations.quaternion_from_euler(0, 0, th)
@@ -90,15 +106,22 @@ if __name__ == '__main__':
         odom.pose.covariance[0] = 0.1
         odom.pose.covariance[7] = 0.1
         odom.pose.covariance[35] = 0.05
-        odom.pose.covariance[14] = infinity
-        odom.pose.covariance[21] = infinity
-        odom.pose.covariance[28] = infinity
+        odom.pose.covariance[14] = 0.1
+        odom.pose.covariance[21] = 0.1
+        odom.pose.covariance[28] = 0.1
 
         last_time = current_time
+        # first, we'll publish the transform over tf
+        odom_broadcaster.sendTransform(
+            (rpy.vector.x, rpy.vector.y, 0.),
+            odom_quat,
+            rpy.timestamp,
+            "base_link",
+            "odom"
+        )        
 
         # publish the message
         odom_pub.publish(odom)
-        print odom
         r.sleep()
 
     rospy.spin()
