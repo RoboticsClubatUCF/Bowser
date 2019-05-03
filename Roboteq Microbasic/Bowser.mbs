@@ -1,0 +1,47 @@
+dim AutoThrottle as integer
+dim AutoSteering as integer
+
+dim estop as integer
+dim toggleRC as integer
+dim throttle as integer
+dim steering as integer
+
+top:
+
+estop = getvalue(_PIC, 3)
+toggleRC = getvalue(_PIC, 4)
+
+If estop < 0 Then
+	GoSub Stop
+ElseIf toggleRC > 0 Then
+	GoSub RC
+Else
+	GoSub Auto
+End If
+
+wait(10)
+goto top
+
+
+
+
+Stop:
+	setcommand(_VAR, 0, 0)
+	setcommand(_VAR, 1, 0)
+	setcommand(_G, 1, 0)
+	setcommand(_G, 2, 0)
+	Return
+
+RC:
+	throttle = getvalue(_PIC, 1)
+	steering = getvalue(_PIC, 2)
+	setcommand(_G, 1, throttle)
+	setcommand(_G, 2, steering)
+	Return
+
+Auto:
+	AutoThrottle = getValue(_VAR, 0) ' !VAR 0 [+/-1000]
+	AutoSteering = getValue(_VAR, 1) ' !VAR 1 [+/-1000]
+	setcommand(_G, 1, AutoThrottle)
+	setcommand(_G, 2, AutoSteering)
+	Return
