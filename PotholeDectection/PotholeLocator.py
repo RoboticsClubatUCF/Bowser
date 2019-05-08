@@ -9,17 +9,23 @@ class pothole_locator:
 		return
 
 	def whiteThreshold(self, image):
-		lower = np.array([180,180,180])
-		upper = np.array([255,255,255])
+		hsv = cv.cvtColor(image, cv.COLOR_BGR2HSV)
+		lower = np.array([0,0,0])
+		upper = np.array([0,0,256])
 
 		# Threshold BGR to get only whitish shades
-		mask = cv.inRange(image, lower, upper)
+		mask = cv.inRange(hsv, lower, upper)
 		return cv.bitwise_and(image, image, mask= mask)
+		return mask
 
 
 	def locate(self, image):
-		image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-		circles = cv.HoughCircles(image, cv.HOUGH_GRADIENT, 1, 1000, param1=100, param2=80)
+		image = self.whiteThreshold(image)
+		img = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+	 	#image = cv.Canny(image, 45 , 100)
+		#image = cv.Sobel(image, -1, 1, 1)
+		circles = cv.HoughCircles(img, cv.HOUGH_GRADIENT, 1.4, 100)
+		plotFrame(image, circles)
 		return circles
 
 	def topDown(self, image):
@@ -52,10 +58,9 @@ def videoIn():
 	loc = pothole_locator()
 	while(True):
 		ret, frame = cap.read()
-		frame = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
-		#frame = loc.whiteThreshold(frame)
+		frame = loc.topDown(frame)
 		circles = loc.locate(frame)
-		plotFrame(frame, circles)
+		#plotFrame(frame, circles)
 		if cv.waitKey(1) & 0xFF == ord('q'):
 			break
 
