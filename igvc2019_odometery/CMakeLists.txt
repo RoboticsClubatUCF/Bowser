@@ -149,6 +149,9 @@ include_directories(
 #   ${catkin_LIBRARIES}
 # )
 
+add_executable(jetson_uart src/jetson_uart.cpp)
+target_link_libraries(jetson_uart ${catkin_LIBRARIES})
+
 #############
 ## Install ##
 #############
