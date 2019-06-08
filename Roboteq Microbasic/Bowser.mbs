@@ -5,6 +5,8 @@ dim estop as integer
 dim toggleRC as integer
 dim throttle as integer
 dim steering as integer
+dim count as integer
+dim on as integer
 
 top:
 
@@ -19,6 +21,19 @@ Else
 	GoSub Auto
 End If
 
+If estop >= 0 Then
+	count = count + 1
+	If count > 100 Then
+		count = 0
+		on = 1 - on
+		If on == 1 Then
+			setcommand(_D0, 0)
+		Else
+			setcommand(_D1, 0)
+		End If
+	End If
+End If
+
 wait(10)
 goto top
 
@@ -30,6 +45,8 @@ Stop:
 	setcommand(_VAR, 1, 0)
 	setcommand(_G, 1, 0)
 	setcommand(_G, 2, 0)
+	setcommand(_D0, 0)
+	setcommand(_D0, 1)
 	Return
 
 RC:
@@ -37,6 +54,11 @@ RC:
 	steering = getvalue(_PIC, 2)
 	setcommand(_G, 1, throttle)
 	setcommand(_G, 2, steering)
+	If throttle < 0 Then
+		setcommand(_D1, 1)
+	Else
+		setcommand(_D0, 1)
+	End If
 	Return
 
 Auto:
@@ -44,4 +66,9 @@ Auto:
 	AutoSteering = getValue(_VAR, 1) ' !VAR 1 [+/-1000]
 	setcommand(_G, 1, AutoThrottle)
 	setcommand(_G, 2, AutoSteering)
+	If throttle < 0 Then
+		setcommand(_D1, 1)
+	Else
+		setcommand(_D0, 1)
+	End If
 	Return
