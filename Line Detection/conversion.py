@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#from __future__ import print_function
+
 
 import roslib
 import numpy as np
@@ -23,7 +23,7 @@ class image_converter:
  # global lines
   lines = None
   def __init__(self):
-    self.image_pub = rospy.Publisher("Line_Image",Image, queue_size = 1)
+    self.image_pub = rospy.Publisher("Distance to",Float32, queue_size = 1)
     self.bridge = CvBridge()
     self.timer = rospy.Time.now()
     self.end_time = self.timer + rospy.Duration(.2)
@@ -40,34 +40,42 @@ class image_converter:
 
     # we want to do a threshold to zero on all values not white
     # define range of color
-    lower = np.array([180,180,180])
-    upper = np.array([255,255,255])
+    lower = np.array([130,130,130])
+    upper = np.array([240,240,240])
+
+    ReduceBrightnessBy = 25
 
     # Threshold BGR to get only whitish shades
     mask = cv2.inRange(cv_image, lower, upper)
 
     #threshold to remove things that are too bright to get rid of glare HSV V= brightness
-    brightnessMin = np.array([0,0,160])
-    brightnessMax = np.array([180,255,230])
 
-    hsvimg = cv2.cvtColor(cv_image, cv2.COLOR_BGR2HSV)
-
-    brightMask = cv2.inRange(hsvimg, brightnessMin, brightnessMax)
-
-
-    res = cv2.bitwise_and(cv_image,cv_image, mask= mask)
-    res = cv2.bitwise_and(res,res, mask= brightMask)
-
-    gray = cv2.cvtColor(res, cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
 
     can = cv2.Canny(gray, 45 , 100)
 
-    #lines = cv2.HoughLines(can,1,np.pi/180,200)
+    image = cv2.bitwise_and(cv_image,cv_image, mask= can)
 
-    # Probabilistic Line Transform
+    hsvimg = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
+    hsvimg[:,:,2] -= ReduceBrightnessBy
 
-    self.lines =  cv2.HoughLines(can,1,np.pi/180,105)
+    for x in hsvimg:
+        for y in hsvimg[x]:
+            val = hsvimg[x,y,2]
+            if( val <0)
+                hsvimg[x,y,2]= 0
+
+    image = hsvimg
+
+    image = cv2.cvtColor(image, cv2.COLOR_HSV2BGR)
+
+    colorMask = cv2.inRange(image, lower, upper)
+
+    image = cv2.bitwise_and(image, image , mask=colorMask)
+
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    self.lines =  cv2.HoughLines(image,1,np.pi/180,105)
     '''
     if self.lines == None:
 
@@ -83,6 +91,9 @@ class image_converter:
     minRhoThresh = 13
     thetaThresh = .5
     #np.concatenate((self.lines, temp), axis=0)
+
+    parallels = []
+
     if( rospy.Time.now() > self.end_time): # get lines over time to
         if self.lines is not None:
 
@@ -127,8 +138,10 @@ class image_converter:
                         ly2 = int(ly0 - 1000*(la))
 
                         color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
-                        cv2.line(cv_image, (lx1,ly1),(lx2,ly2), color, 2)
-                        cv2.line(cv_image, (x1,y1),(x2,y2),color,2)
+
+                        parallels.append((cur,line)))
+
+
                         self.lines = np.delete(self.lines, index,0)
                         break
 
@@ -139,8 +152,45 @@ class image_converter:
 
 
         self.lines = None
-        self.end_time = rospy.Time.now() + rospy.Duration(.2)
-    #end editing
+        self.end_time = rospy.Time.now() + rospy.Duration(.1)
+
+
+
+    numline =len (parallels)
+
+    averagey = 0
+
+    for i in range( numLine):
+
+        l1 = numline[i][0]
+        l1rho = l1[0]
+        l1theta = l1[1]
+        l1a = np.cos(l1theta)
+        l1b = np.sin(l1theta)
+        l1x0 = l1a*l1rho
+        l1y0 = l1b*l1rho
+
+
+        l2 = numline[i][1]
+        l2rho = l2[0]
+        l2theta = l2[1]
+        l2a = np.cos(l2theta)
+        l2b = np.sin(l2theta)
+        l2x0 = l2a*l2rho
+        l2y0 = l2b*l2rho
+
+
+        closest = (l2y0 < l1y0)? l1y0 : l2y0
+        averagey += closest
+
+    averagey /= numline
+
+    distanceInInches = 176 - 27.3*(np.ln(averagey))
+
+    meters = distanceInInches * 0.0254
+
+
+
 
 
     cv2.imshow("edges window", can )
@@ -149,9 +199,11 @@ class image_converter:
     cv2.waitKey(3)
 
     try:
-      self.image_pub.publish(self.bridge.cv2_to_imgmsg(cv_image, "bgr8"))
+      self.image_pub.publish(meters)
     except CvBridgeError as e:
       print(e)
+
+
 
 def main(args):
   rospy.init_node('image_converter', anonymous=True)
