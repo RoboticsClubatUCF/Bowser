@@ -27,12 +27,12 @@ class WaypointHeader:
 	publish = True
 	endcount = 0
 	def __init__(self):
-		self.velopub = rospy.Publisher("commandVelocity", Float32MultiArray, queue_size = 1)
-		self.gpssub = rospy.Subscriber("/fix", NavSatFix, gpsHeader)
-		self.imusub = rospy.Subscriber("/an_device/Imu", Imu, imuHandler)
+		self.velopub = rospy.Publisher("/commandVelocity", Float32MultiArray, queue_size = 1)
+		self.gpssub = rospy.Subscriber("/fix", NavSatFix, self.gpsHandler)
+		self.imusub = rospy.Subscriber("/an_device/Imu", Imu, self.imuHandler)
 		#self.statesub = rospy.Subscriber("STATE", String, setState)
-		self.endpoint = firstEnd
 		self.endcount = 0
+		self.endpoint = self.practiceends[self.endcount]
 		return
 
 	def gpsHandler(self, data):
@@ -50,8 +50,10 @@ class WaypointHeader:
 		return
 
 	def imuHandler(self, data):
-		if self.publish:
-			self.velopub.publish(self.headerToCommandVector((currentLocation[0], currentLocation[1]), data.orientation.z, (self.endpoint[0], self.endpoint[1])))
+		arg = Float32MultiArray()
+		arg.data = self.headerCorrection((self.currentLocation[0], self.currentLocation[1]), data.orientation.z, (self.endpoint[0], self.endpoint[1]))
+		#rospy.loginfo(arg)
+		self.velopub.publish(arg)
 		return
 
 	def headerCorrection(self, loc, z, end):
@@ -62,7 +64,7 @@ class WaypointHeader:
 	def gpsHeader(self, loc, end):
 		ewMeters = math.fabs(loc[0] - end[0])*(10000000/90)
 		nsMeters = math.fabs(loc[1] - end[1])*(10000000/90)
-		return cart2pol(nsMeters, ewMeters)
+		return self.cart2pol(nsMeters, ewMeters)
 
 	def headerToCommandVector(self, r, theta):
 		theta = theta*2
@@ -70,22 +72,25 @@ class WaypointHeader:
 			turn = (theta - 1) * -1
 		else:
 			turn = theta
-		speed = math.min(math.sqrt(r), 1) - math.min(math.fabs(turn**2), 1)
+		speed = min(math.sqrt(r), 1) - min(math.fabs(turn**2), 1)
 		return [speed, turn]
 
-	def cart2pol(x, y):
+	def cart2pol(self, x, y):
 		r = math.sqrt((x**2)+(y**2))
 		theta = ((numpy.arctan2(x, y) / numpy.pi) +1)/2
 		return (r, theta)
 
+print("This print statement is placed between the class definition and the definition for main.")
 
 def main(args):
-  rospy.init_node('gps', anonymous=False)
+  rospy.init_node('WaypointNavigation', anonymous=False)
+  header = WaypointHeader()
 
   try:
     rospy.spin()
   except KeyboardInterrupt:
     print("Shutting down")
 
+
 if __name__ == '__main__':
-    main(sys.argv)
+	main(sys.argv)
