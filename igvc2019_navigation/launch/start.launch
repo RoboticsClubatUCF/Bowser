@@ -10,14 +10,16 @@
     <node pkg="tf" type="static_transform_publisher" name="base_frame" args="0 0 0 0 0 0 odom base_link 100"/>
     <node pkg="tf" type="static_transform_publisher" name="ekf_frame" args="0 0 0 0 0 0 odom odom_combined 100"/>
     <node pkg="tf" type="static_transform_publisher" name="gps_frame" args="0 0 0 0 0 0 odom gps 100"/>
-    
-    
+
+
 
 	<!-- Velodyne VLP16 Puck Launch -->
 		<include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch" />
-        
+
+
     <!-- GPS IMU Launch -->
-        <include file ="$(find igvc2019_navigation)/launch/gps_imu.launch"/>
+		<include file ="$(find igvc2019_navigation)/launch/gps_imu.launch"/>
+		<include file ="$(find igvc2019_navigation)/launch/customCode.launch"/>
 
     <!-- IMU Covariance -->
         <node pkg ="igvc2019_lidar" type = "imu_covariance.py" name ="imu_covariance"/>
@@ -28,7 +30,7 @@
 		<param name="linearUpdate" value="0.0"/>
 		<param name="angularUpdate" value="0.5"/>
         <param name= "map_update_interval" value = "4"/>
-        <param name= "minimumScore" value = "300"/>  
+        <param name= "minimumScore" value = "300"/>
 	</node>
 
 	<!-- Debugging Utilities -->
