@@ -13,6 +13,21 @@ void clean_and_exit(int code);
 extern "C" void quit_signal_handler(int signum);
 extern "C" void uart_signal_handler(int signum);
 
+unsigned char translateChar(char a)
+{
+    if(a % 2 == 1)
+    {
+        //a = ((unsigned char)a << 1);
+        a = ~a;
+    }
+    else
+    {
+        a = ((unsigned char)a << 1 | (unsigned char)a >> 7);
+        a = ~a;
+    }
+    return (a & 127);
+}
+
 int main (int argc, char **argv)
 {
     // help variables
@@ -26,10 +41,10 @@ int main (int argc, char **argv)
     tcsetattr( STDIN_FILENO, TCSANOW, &newt);
 
     // Open serial port
-    serial_descriptor = open("/dev/ttyTHS1", O_RDWR | O_NDELAY | O_NONBLOCK);
+    serial_descriptor = open("/dev/ttyUSB0", O_RDWR | O_NDELAY | O_NONBLOCK);
     if (serial_descriptor == -1)
     {
-        printf("Could not open serial port on /dev/ttyTHS1!\n");
+        printf("Could not open serial port on /dev/ttyUSB0!\n");
         clean_and_exit(-1);
     }
     else fcntl(serial_descriptor, F_SETFL, 0);
@@ -48,8 +63,8 @@ int main (int argc, char **argv)
     // UART settings
     struct termios termAttr;
     tcgetattr(serial_descriptor,&termAttr);
-    cfsetispeed(&termAttr,B9600);                       // Input speed
-    cfsetospeed(&termAttr,B9600);                       // Output speed
+    cfsetispeed(&termAttr,B115200);                       // Input speed
+    cfsetospeed(&termAttr,B115200);                       // Output speed
     termAttr.c_iflag = 0;                               // Turn off input processing
     termAttr.c_oflag = 0;                               // Turn of output processing
     termAttr.c_lflag = 0;                               // Turn off line procesinng
@@ -118,6 +133,9 @@ void uart_signal_handler(int signum)
         {
             printf("Will end now!\n");
             clean_and_exit(0);
-        } else printf("Got command = %c\n", buffer[0]);
+        } else {
+            printf("Normal = %u\n", buffer[0]);
+            printf("Translated = %u\n", translateChar(buffer[0]));
+        }
     }
 }
