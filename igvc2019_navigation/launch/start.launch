@@ -1,0 +1,39 @@
+<launch>
+	<!-- Setting parameters, use spaces not tabs -->
+	<rosparam>
+      covariance: 0.01
+      imu_topic: an_device/Imu
+    </rosparam>
+
+	<!-- Target Frame Launch -->
+    <node pkg="tf" type="static_transform_publisher" name="velodyne_frame" args="0 0 0 0 0 0 base_link velodyne 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="base_frame" args="0 0 0 0 0 0 odom base_link 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="ekf_frame" args="0 0 0 0 0 0 odom odom_combined 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="gps_frame" args="0 0 0 0 0 0 odom gps 100"/>
+
+
+
+	<!-- Velodyne VLP16 Puck Launch -->
+		<include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch" />
+
+
+    <!-- GPS IMU Launch -->
+		<include file ="$(find igvc2019_navigation)/launch/gps_imu.launch"/>
+		<include file ="$(find igvc2019_navigation)/launch/customCode.launch"/>
+
+    <!-- IMU Covariance -->
+        <node pkg ="igvc2019_lidar" type = "imu_covariance.py" name ="imu_covariance"/>
+
+	<!-- SLAM gmapping -->
+		<node name="slam_gmapping" type="slam_gmapping" pkg="gmapping" output="screen">
+		<param name="scan" value="/scan"/>
+		<param name="linearUpdate" value="0.0"/>
+		<param name="angularUpdate" value="0.5"/>
+        <param name= "map_update_interval" value = "4"/>
+        <param name= "minimumScore" value = "300"/>
+	</node>
+
+	<!-- Debugging Utilities -->
+		<node pkg="rqt_graph" type="rqt_graph" name="rqt_graph"/>
+		<node pkg="rviz" type="rviz" name="rviz"/>
+</launch>
