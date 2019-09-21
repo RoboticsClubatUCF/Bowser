@@ -1,0 +1,213 @@
+<?xml version='1.0'?>
+<sdf version="1.5">
+<model name="real_bowser">
+  <pose>0 0 0.5 0 0 0</pose>
+  <static>false</static>
+    <link name="base_link">
+      <inertial>
+        <mass>1.0</mass>
+        <inertia> <!-- inertias are tricky to compute -->
+          <!-- http://gazebosim.org/tutorials?tut=inertia&cat=build_robot -->
+          <ixx>0.083</ixx>       <!-- for a box: ixx = 0.083 * mass * (y*y + z*z) -->
+          <ixy>0.0</ixy>         <!-- for a box: ixy = 0 -->
+          <ixz>0.0</ixz>         <!-- for a box: ixz = 0 -->
+          <iyy>0.083</iyy>       <!-- for a box: iyy = 0.083 * mass * (x*x + z*z) -->
+          <iyz>0.0</iyz>         <!-- for a box: iyz = 0 -->
+          <izz>0.083</izz>       <!-- for a box: izz = 0.083 * mass * (x*x + y*y) -->
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>.9 .6 .3</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box>
+            <size>.9 .6 .3</size>
+          </box>
+        </geometry>
+      </visual>
+
+      <collision name='caster_collision'>
+            <pose>.35 0 -0.15 0 0 0</pose>
+            <geometry>
+                <sphere>
+                <radius>.075</radius>
+              </sphere>
+            </geometry>
+
+            <surface>
+              <friction>
+                <ode>
+                  <mu>0</mu>
+                  <mu2>0</mu2>
+                  <slip1>1.0</slip1>
+                  <slip2>1.0</slip2>
+                </ode>
+              </friction>
+            </surface>
+          </collision>
+
+          <visual name='caster_visual'>
+            <pose>.35 0 -.15 0 0 0</pose>
+            <geometry>
+              <sphere>
+                <radius>.075</radius>
+              </sphere>
+            </geometry>
+          </visual>
+
+    </link>
+
+    <link name="front_left_wheel">
+      <pose>-0.3 -.37 -0.05 0 0 0</pose>
+      <inertial>
+        <mass>2.6357</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0.0246688</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.0246688</iyy>
+          <iyz>0</iyz>
+          <izz>0.0441058</izz>
+        </inertia>
+      </inertial>
+      <collision name="front_left_wheel_collision">
+        <pose>0 0 0 -1.5707 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.17775</radius>
+            <length>0.1143</length>
+          </cylinder>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>100000.0</mu>
+              <mu2>100000.0</mu2>
+              <slip1>0.0</slip1>
+              <slip2>0.0</slip2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="front_left_wheel">
+        <pose>0 0 0 -3.14159 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://husky/meshes/wheel.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Grey</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+    <joint name="front_left_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>front_left_wheel</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <use_parent_model_frame>true</use_parent_model_frame>
+      </axis>
+      <physics>
+        <ode>
+          <limit>
+            <cfm>0.000000</cfm>
+            <erp>0.900000</erp>
+          </limit>
+        </ode>
+      </physics>
+    </joint>
+
+    <link name="front_right_wheel">
+      <pose>-0.3 .37 -0.05 0 0 0</pose>
+      <inertial>
+        <mass>2.6357</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0.0246688</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.0246688</iyy>
+          <iyz>0</iyz>
+          <izz>0.0441058</izz>
+        </inertia>
+      </inertial>
+      <collision name="front_right_wheel_collision">
+        <pose>0 0 0 -1.5707 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.17775</radius>
+            <length>0.1143</length>
+          </cylinder>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>100000.0</mu>
+              <mu2>100000.0</mu2>
+              <slip1>0.0</slip1>
+              <slip2>0.0</slip2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="front_right_wheel">
+        <pose>0 0 0 -3.14159 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://husky/meshes/wheel.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Grey</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+    <joint name="front_right_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>front_right_wheel</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <use_parent_model_frame>true</use_parent_model_frame>
+      </axis>
+      <physics>
+        <ode>
+          <limit>
+            <cfm>0.000000</cfm>
+            <erp>0.900000</erp>
+          </limit>
+        </ode>
+      </physics>
+    </joint>
+
+
+    <plugin filename="libgazebo_ros_diff_drive.so" name="diff_drive_controller">
+    	<alwaysOn>true</alwaysOn>
+  		<updateRate>100</updateRate>
+
+  		<leftJoint>front_left_joint</leftJoint>
+  		<rightJoint>front_right_joint</rightJoint>
+  		<wheelSeparation>0.74</wheelSeparation>
+	    <wheelDiameter>0.3555</wheelDiameter>
+	    <torque>20</torque>
+
+	    <commandTopic>/bowser/diff_drive</commandTopic>
+	    <odometryTopic>/bowser/odom</odometryTopic>
+	    <odometryFrame>odom</odometryFrame>
+	    <robotBaseFrame>base_link</robotBaseFrame>
+
+    </plugin>
+
+
+  </model>
+</sdf>
