@@ -5,10 +5,12 @@ import roslib
 import numpy as np
 import sys
 import rospy
+import rosunit
 import math
 import cv2
 import random
 #import cv2.cv as cv
+
 from std_msgs.msg import String
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
@@ -24,7 +26,7 @@ class image_processor:
  # global lines
   lines = None
   def __init__(self):
-    self.image_pub = rospy.Publisher("Line_Image",Image, queue_size = 1)
+    self.image_pub = rospy.Publisher("Lane Distance",Float64, queue_size = 1)
     self.bridge = CvBridge()
     self.timer = rospy.Time.now()
     self.end_time = self.timer + rospy.Duration(.2)
