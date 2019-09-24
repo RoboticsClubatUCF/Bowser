@@ -1,4 +1,0 @@
-<launch>
-	<node pkg="igvc2019_navigation" name="WaypointNavigation" type="WaypointHeader.py"/>
-	<node pkg="igvc2019_navigation" name="MotorControl" type="MotorControl.py"/> 
-</launch>
