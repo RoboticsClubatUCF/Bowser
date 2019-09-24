@@ -13,7 +13,7 @@ from std_msgs.msg import String
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 
-class image_converter:
+class image_processor:
 
   #global timer
   timer= None
@@ -188,17 +188,17 @@ class image_converter:
     if distanceIn < 80 :
         print(distanceIn)
 
+    distanceMeters = distanceIn * 0.254
 
     cv2.waitKey(3)
 
-    try:
-      self.image_pub.publish(self.bridge.cv2_to_imgmsg(cv_image, "bgr8"))
-    except CvBridgeError as e:
-      print(e)
+
+    self.image_pub.publish(distanceMeters)
+
 
 def main(args):
-  rospy.init_node('image_converter', anonymous=True)
-  ic = image_converter()
+  rospy.init_node('laneDistance', anonymous=True)
+  ic = image_processor()
 
   try:
     rospy.spin()
