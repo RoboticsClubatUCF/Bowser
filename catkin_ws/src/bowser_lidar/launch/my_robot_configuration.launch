@@ -1,0 +1,8 @@
+<launch>
+
+   <node pkg="velodyne_driver" type="velodyne_node" name="velodyne_sensor" output="screen">
+   </node>
+   <node pkg="imu_vn_100" type="imu_vn_100_node" name="imu_odom" output="screen">
+   </node>
+   
+</launch> 
