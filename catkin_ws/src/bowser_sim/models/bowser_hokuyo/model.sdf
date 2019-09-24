@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdf version="1.5">
-  <model name="hokuyo">
+  <model name="bowser_hokuyo">
     <pose>0 0 0.035 0 0 0</pose>
     <link name="link">
       <inertial>
@@ -32,6 +32,7 @@
       </collision>
       <sensor name="laser" type="ray">
         <pose>0.01 0 0.0175 0 -0 0</pose>
+        <visualize>true</visualize>
         <ray>
           <scan>
             <horizontal>
@@ -40,6 +41,12 @@
               <min_angle>-2.26889</min_angle>
               <max_angle>2.268899</max_angle>
             </horizontal>
+            <!-- <vertical>
+              <samples>144</samples>
+              <resolution>.1</resolution>
+              <min_angle>-2.26889</min_angle>
+              <max_angle>2.26889</max_angle>
+            </vertical> -->
           </scan>
           <range>
             <min>0.08</min>

@@ -190,6 +190,15 @@
       </physics>
     </joint>
 
+	<include>
+		<uri>model://bowser_hokuyo</uri>
+		<pose> -.35 0 .2 0 0 3.14159 </pose>
+	</include>	
+    <joint name="hokuyo_joint" type="fixed">
+    	<parent>base_link</parent>
+    	<child>bowser_hokuyo::link</child>
+    </joint>	
+
 
     <plugin filename="libgazebo_ros_diff_drive.so" name="diff_drive_controller">
     	<alwaysOn>true</alwaysOn>
@@ -207,7 +216,5 @@
 	    <robotBaseFrame>base_link</robotBaseFrame>
 
     </plugin>
-
-
   </model>
 </sdf>
