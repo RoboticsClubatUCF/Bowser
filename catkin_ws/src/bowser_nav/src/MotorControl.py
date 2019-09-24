@@ -16,7 +16,7 @@ class motocommand:
 	throttleVar = 0
 	steeringVar = 1
 	ser = serial.Serial(
-		port='/dev/ttyUSB0',
+		port='/dev/ttyUSB0', # TODO: Find the right port, this ain't it, chief
 		baudrate = 115200,
 		parity=serial.PARITY_NONE,
 		stopbits=serial.STOPBITS_ONE,
@@ -25,6 +25,7 @@ class motocommand:
 		)
 
 	def __init__(self):
+		# /commandVelocity 
 		self.velosub = rospy.Subscriber("/commandVelocity", Float32MultiArray, self.callback)
 		return
 

@@ -32,7 +32,7 @@
       </collision>
       <sensor name="laser" type="ray">
         <pose>0.01 0 0.0175 0 -0 0</pose>
-        <visualize>true</visualize>
+        <visualize>false</visualize>
         <ray>
           <scan>
             <horizontal>
