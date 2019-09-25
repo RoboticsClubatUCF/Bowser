@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/darien/Bowser/catkin_ws/src/bowser_odom/src/jetson_uart.cpp
+stdio.h
+-
+string.h
+-
+cstdlib
+-
+termios.h
+-
+unistd.h
+-
+sys/signal.h
+-
+unistd.h
+-
+fcntl.h
+-
+

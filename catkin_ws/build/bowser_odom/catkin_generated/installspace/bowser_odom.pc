@@ -1,0 +1,8 @@
+prefix=/home/darien/Bowser/catkin_ws/install
+
+Name: bowser_odom
+Description: Description of bowser_odom
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/darien/Bowser/catkin_ws/install/lib 
+Requires: 
