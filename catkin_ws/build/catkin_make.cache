@@ -1,0 +1,2 @@
+bowser_lidar:bowser_nav:bowser_odom:bowser_sim:bowser_states
+-DCATKIN_DEVEL_PREFIX=/home/darien/Bowser/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/darien/Bowser/catkin_ws/install -G Unix Makefiles

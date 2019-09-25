@@ -1,0 +1,8 @@
+prefix=/home/darien/Bowser/catkin_ws/install
+
+Name: bowser_lidar
+Description: Description of bowser_lidar
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/darien/Bowser/catkin_ws/install/lib 
+Requires: 
