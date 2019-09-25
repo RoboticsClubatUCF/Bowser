@@ -1,8 +1,0 @@
-prefix=/home/darien/Bowser/catkin_ws/devel
-
-Name: bowser_sim
-Description: Description of bowser_sim
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/darien/Bowser/catkin_ws/devel/lib -lbowser_sim
-Requires: gazebo_ros
