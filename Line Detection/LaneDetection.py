@@ -12,6 +12,7 @@ import random
 #import cv2.cv as cv
 
 from std_msgs.msg import String
+import std_msgs.msg 
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 
