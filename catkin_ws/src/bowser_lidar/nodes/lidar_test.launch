@@ -1,0 +1,7 @@
+<launch>
+	<!-- Velodyne VLP16 Puck Launch -->
+		<include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch" />
+
+	<!-- Lidar Test -->
+		<node pkg="igvc2019_lidar" name="lidar" type="detect_lidar.py"/>
+</launch>
