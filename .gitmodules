@@ -1,0 +1,3 @@
+[submodule "catkin_ws/src/velo2cam_gazebo"]
+	path = catkin_ws/src/velo2cam_gazebo
+	url = https://github.com/beltransen/velo2cam_gazebo.git

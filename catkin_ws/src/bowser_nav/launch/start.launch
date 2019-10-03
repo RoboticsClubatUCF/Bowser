@@ -18,11 +18,11 @@
 
 
     <!-- GPS IMU Launch -->
-		<include file ="$(find igvc2019_navigation)/launch/gps_imu.launch"/>
-		<include file ="$(find igvc2019_navigation)/launch/customCode.launch"/>
+		<include file ="$(find bowser_nav)/launch/gps_imu.launch"/>
+		<include file ="$(find bowser_nav)/launch/customCode.launch"/>
 
     <!-- IMU Covariance -->
-        <node pkg ="igvc2019_lidar" type = "imu_covariance.py" name ="imu_covariance"/>
+        <node pkg ="bowser_lidar" type = "imu_covariance.py" name ="imu_covariance"/>
 
 	<!-- SLAM gmapping -->
 		<node name="slam_gmapping" type="slam_gmapping" pkg="gmapping" output="screen">
