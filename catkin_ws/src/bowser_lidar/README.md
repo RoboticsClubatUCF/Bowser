@@ -1,11 +1,11 @@
 # igvc2019_lidar
-For the UCF Robotics Club.
+For the Robotics Club at UCF.
 
 Uses ROS and depends on packages robot_pose_ekf from navigation, imu_vn_100, slam_gmapping, velodyne, and tf.
 
 # Installation
-1. Ensure you are using Ubuntu 16.04 for compatability.
-2. Install ROS Kinetic by following http://wiki.ros.org/kinetic/Installation/Ubuntu
+1. Ensure you are using Ubuntu 18.04 for compatability.
+2. Install ROS Melodic by following http://wiki.ros.org/melodic/Installation/Ubuntu
 3. Create a ROS workspace http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment
 4. Open the terminal and copy repository on your computer's catkin workspace source folder with
 	```console
@@ -31,13 +31,13 @@ Uses ROS and depends on packages robot_pose_ekf from navigation, imu_vn_100, sla
 		```console
 		your@terminal:~/catkin_ws/src$ git clone https://github.com/ros-perception/slam_gmapping.git
 		```
-	4. Use apt-get to install the ros-kinetic-navigation package.
+	4. Use apt-get to install the ros-melodic-navigation package.
 		```console
-		your@terminal$ sudo apt-get install ros-kinetic-navigation
+		your@terminal$ sudo apt-get install ros-melodic-navigation
 		```
-	5. Use apt-get to install the ros-kinetic-robot-pose-ekf package.
+	5. Use apt-get to install the ros-melodic-robot-pose-ekf package.
 		```console
-		your@terminal:~$ sudo apt-get install ros-kinetic-robot-pose-ekf
+		your@terminal:~$ sudo apt-get install ros-melodic-robot-pose-ekf
 		```
 9. Update your links in your catkin workspace by using
 	```console
@@ -53,6 +53,6 @@ Uses ROS and depends on packages robot_pose_ekf from navigation, imu_vn_100, sla
 	your@terminal:~$ roslaunch igvc2019_navigation start.launch
 	```
 	1. If this fails, go through at the steps above again and refer to their troubleshooting solutions.
-	2. If their troubleshooting solutions don't solve your problem, make sure you are using Ubuntu 16.04 and ROS Kinetic. Any questions about other distributions will not be addressed.
+	2. If their troubleshooting solutions don't solve your problem, make sure you are using Ubuntu 16.04 and ROS Melodic. Any questions about other distributions will not be addressed.
 	3. Post an issue thread on our GitHub repository and we will attempt to manually address the issue and update the installation instructions for as long as we are available.
 13. Read velodyne_test_procedure.md and imu_test_procedure.md for more instructions.
