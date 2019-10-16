@@ -14,7 +14,10 @@
 
 
 	<!-- Velodyne VLP16 Puck Launch -->
-		<include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch" />
+		<include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch">
+			<param name="max_range" value="0.0"/>
+			<param name="min_range" value="20.0"/>
+		</include>
 
 
     <!-- GPS IMU Launch -->
