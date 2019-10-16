@@ -2,7 +2,3 @@
 	path = catkin_ws/src/slam_gmapping
 	url = https://github.com/ros-perception/slam_gmapping.git
 	branch = melodic-devel
-[submodule "catkin_ws/src/velodyne"]
-	path = catkin_ws/src/velodyne
-	url = https://github.com/ros-drivers/velodyne.git
-	branch = master
