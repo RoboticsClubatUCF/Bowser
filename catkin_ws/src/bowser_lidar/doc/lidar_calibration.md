@@ -22,6 +22,7 @@ Distance 		Clearance (0.4 deg) 			Clearance(0.1 deg)
 
 Elevated Distance Measurements (m)
 Elevation: 4.6 inches
+
 | Real | RVIZ | Diff | Error |
 |----|---|----|-----|
 | 0.43 | 0.508 | -0.078 | -18.1% |
