@@ -6,7 +6,7 @@ import time
 from bowser_msg.msg import CommandVector
 
 
-def XYToVector(data):
+def VectorToXY(data):
 
 	pass
 
@@ -14,7 +14,7 @@ def XYToVector(data):
 def main():
 
 	rospy.init_node('motor_conversion', anonymous=True)
-	rospy.Subscriber('/bowser/motors', CommandVector, XYToVector)
+	rospy.Subscriber('/bowser/motors', CommandVector, VectorToXY)
 	rospy.spin()
 
 if __name__=='__main__':
