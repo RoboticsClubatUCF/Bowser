@@ -74,11 +74,17 @@
           </noise>
 
           <scan>
-            <horizontal>
-              <samples>32</samples>
+            <vertical>
+              <samples>64</samples>
               <resolution>1</resolution>
-              <min_angle>-0.53529248</min_angle>
-              <max_angle>0.18622663</max_angle>
+              <min_angle>-3.14159</min_angle>
+              <max_angle>3.14159</max_angle>
+            </vertical>
+            <horizontal>
+                <samples>16</samples>
+                <resolution>1</resolution>
+                <min_angle>-.2617993878</min_angle>
+                <max_angle> .2617993878</max_angle>
             </horizontal>
           </scan>
 
@@ -88,7 +94,7 @@
             <resolution>0.02</resolution>
           </range>
         </ray>
-        <plugin name="laser" filename="libgazebo_ros_laser.so">
+        <plugin name="laser" filename="libgazebo_ros_velodyne_laser.so">
 	        	<topicName>/bowser/velodyne</topicName>
 		        <frameName>link</frameName>
 	      </plugin>
@@ -109,7 +115,7 @@
     </joint>
 
     <plugin name="velodyne_control" filename="libvelodyne_plugin.so">
-      <velocity>25</velocity>
+      <velocity>0</velocity>
       <!-- looks like ~28hz-->
     </plugin>
 
