@@ -64,7 +64,7 @@
 
       <sensor type="ray" name="sensor">
         <pose>0 0 -0.004645 1.5707 0 0</pose>
-        <visualize>true</visualize>
+        <visualize>false</visualize>
         <update_rate>30</update_rate>
         <ray>
           <noise>
