@@ -225,7 +225,14 @@
         <updateRate>10.0</updateRate> 
     </plugin>
 
-
+    <include>
+      <uri>model://bowser_depthcam</uri>
+      <pose> 0 0 .4548 0 0 3.14159</pose>
+    </include>
+    <joint name="depthcam_joint" type="fixed">
+      <parent>base_link</parent>
+      <child>bowser_depthcam::link</child>
+    </joint>    
 
 
     <!-- <gazebo reference="camera_link">
