@@ -31,7 +31,7 @@
           </image>
           <clip>
             <near>0.05</near>
-            <far>3</far>
+            <far>10</far>
           </clip>
         </camera>
 
@@ -49,7 +49,7 @@
           <pointCloudTopicName>/camera/depth/points</pointCloudTopicName>
           <frameName>camera_link</frameName>
           <pointCloudCutoff>.5</pointCloudCutoff>
-          <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
+          <pointCloudCutoffMax>10.0</pointCloudCutoffMax>
           <distortionK1>0</distortionK1>
           <distortionK2>0</distortionK2>
           <distortionK3>0</distortionK3>
