@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <sdf version="1.5">
-<model name="real_bowser">
-  <pose>0 0 0.5 0 0 0</pose>
+<model name="bowser">
+  <pose>0 0 .5 0 0 0</pose>
   <static>false</static>
     <link name="base_link">
       <inertial>
@@ -233,6 +233,16 @@
       <parent>base_link</parent>
       <child>bowser_depthcam::link</child>
     </joint>    
+
+    <plugin name="imu_cam_plugin" filename="libgazebo_ros_imu.so">
+        <alwaysOn>true</alwaysOn>       
+        <bodyName>bowser_depthcam::link</bodyName>
+        <topicName>/bowser/imu_cam</topicName>
+        <serviceName>imu_cam_service</serviceName>
+        <gaussianNoise>0.0</gaussianNoise>
+        <updateRate>10.0</updateRate> 
+    </plugin>
+
 
     <plugin name="gps_controller" filename="libhector_gazebo_ros_gps.so">
       <alwayson>true</alwayson>

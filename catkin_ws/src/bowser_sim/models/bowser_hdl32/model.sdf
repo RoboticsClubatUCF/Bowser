@@ -96,7 +96,7 @@
         </ray>
         <plugin name="laser" filename="libgazebo_ros_velodyne_laser.so">
 	        	<topicName>/bowser/velodyne</topicName>
-		        <frameName>link</frameName>
+		        <frameName>velodyne_link</frameName>
 	      </plugin>
       </sensor>
     </link>
