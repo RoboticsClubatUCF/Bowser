@@ -1,11 +1,11 @@
 <?xml version='1.0'?>
 <sdf version="1.5">
-<model name="real_bowser">
-  <pose>0 0 0.5 0 0 0</pose>
+<model name="bowser">
+  <pose>0 0 .5 0 0 0</pose>
   <static>false</static>
     <link name="base_link">
       <inertial>
-        <mass>1.0</mass>
+        <mass>124</mass>
         <inertia> <!-- inertias are tricky to compute -->
           <!-- http://gazebosim.org/tutorials?tut=inertia&cat=build_robot -->
           <ixx>0.083</ixx>       <!-- for a box: ixx = 0.083 * mass * (y*y + z*z) -->
@@ -198,16 +198,6 @@
     	<parent>base_link</parent>
     	<child>bowser_hdl32::base</child>
     </joint>	
-  
-    <!-- <include>
-      <uri>model://bowser_camera</uri>
-      <pose> -.35 1 .2 0 0 3.14159 </pose>
-    </include>
-    <joint name="camera_joint" type="fixed">
-      <parent>base_link</parent>
-      <child>bowser_camera::link</child>
-    </joint>     -->
-
 
     <plugin filename="libgazebo_ros_diff_drive.so" name="diff_drive_controller">
     	<alwaysOn>true</alwaysOn>
@@ -225,6 +215,47 @@
 	    <robotBaseFrame>base_link</robotBaseFrame>
 
     </plugin>
+
+    <plugin name="imu_plugin" filename="libgazebo_ros_imu.so">
+        <alwaysOn>true</alwaysOn>       
+        <bodyName>base_link</bodyName>
+        <topicName>/bowser/imu</topicName>
+        <serviceName>imu_service</serviceName>
+        <gaussianNoise>0.0</gaussianNoise>
+        <updateRate>10.0</updateRate> 
+    </plugin>
+
+    <include>
+      <uri>model://bowser_depthcam</uri>
+      <pose> 0 0 .4548 0 0 3.14159</pose>
+    </include>
+    <joint name="depthcam_joint" type="fixed">
+      <parent>base_link</parent>
+      <child>bowser_depthcam::link</child>
+    </joint>    
+
+    <plugin name="imu_cam_plugin" filename="libgazebo_ros_imu.so">
+        <alwaysOn>true</alwaysOn>       
+        <bodyName>bowser_depthcam::link</bodyName>
+        <topicName>/bowser/imu_cam</topicName>
+        <serviceName>imu_cam_service</serviceName>
+        <gaussianNoise>0.0</gaussianNoise>
+        <updateRate>10.0</updateRate> 
+    </plugin>
+
+
+    <plugin name="gps_controller" filename="libhector_gazebo_ros_gps.so">
+      <alwayson>true</alwayson>
+      <updaterate>1.0</updaterate>
+      <bodyname>base_link</bodyname>
+      <topicname>/bowser/fix</topicname>
+      <velocitytopicname>/bowser/fix_velocity</velocitytopicname>
+      <drift>5.0 5.0 5.0</drift>
+      <gaussiannoise>0.1 0.1 0.1</gaussiannoise>
+      <velocitydrift>0 0 0</velocitydrift>
+      <velocitygaussiannoise>0.1 0.1 0.1</velocitygaussiannoise>
+    </plugin>
+
 
     <!-- <gazebo reference="camera_link">
     <sensor type="camera" name="camera1">

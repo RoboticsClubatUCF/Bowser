@@ -10,6 +10,20 @@
     	<arg name="verbose" value="true"/>
 	</include>
 
+	<node pkg="bowser_sim" type="motor_conversion.py" name="motor_conversion" />
+	
+    <node pkg="tf" type="static_transform_publisher" name="lidar_tf" args="-.35 0 .2 0 0 3.14159 bowser/base_link bowser/velodyne_link 100" />
+
+    <node pkg="tf" type="static_transform_publisher" name="depth_cam_tf" args="0 0 .4548 0 0 3.14159 bowser/base_link bowser/camera_link 100" />
+
+    <node pkg="tf" type="static_transform_publisher" name="gps_tf" args="0 0 0 0 0 0 bowser/base_link bowser/gps_controller 100" />
+
+    <node pkg="tf" type="static_transform_publisher" name="imu_cam_tf" args="0 0 .4548 0 0 3.14159 bowser/base_link bowser/imu_cam_plugin 100" />
+
+    <node pkg="tf" type="static_transform_publisher" name="imu_tf" args="0 0 0 0 0 0 bowser/base_link bowser/imu_plugin 100" />
+
+
+
 
 
 
