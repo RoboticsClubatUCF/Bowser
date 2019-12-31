@@ -11,6 +11,7 @@ except ImportError:
 from datetime import datetime
 import rospy, roslaunch
 
+from std_srvs.srv import Empty
 from bowser_msg.msg import CommandVector
 
 # TEXT COLORS for use with textWrap()
@@ -26,7 +27,7 @@ UNDERLINE = '\033[4m'
 class SimShell(cmd.Cmd):
 
     intro   = 'simulation tool for bowser_sim'
-    prompt  = '(Bowser)'
+    prompt  = HEADER + '(Bowser)' + ENDC
     file    = None  
 
     def do_end(self, arg):
@@ -34,8 +35,21 @@ class SimShell(cmd.Cmd):
 
         return True    
 
+    def do_reset(self, arg):
+        'Reset simulation to start conditions'
+
+        try:
+            reset = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
+            status = reset()
+            if status:
+                return
+        except rospy.ServiceException, e:
+            print "Service call failed: %s"%e    
+
+
     def do_record(self, arg):
-        'Record a topic\'s messages to a file'                
+        """Record a topic\'s messages to a file
+        usage: record [topic] [filename] \n"""       
 
         file = topic = ""
         args = str.split(arg)
