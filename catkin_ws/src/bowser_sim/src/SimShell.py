@@ -8,13 +8,12 @@ except ImportError:
     import os
     DEVNULL = open(os.devnull, 'wb')
 
-from datetime import datetime
+# ROS-specific imports
 import rospy, roslaunch
-
 from std_srvs.srv import Empty
 from bowser_msg.msg import CommandVector
 
-# TEXT COLORS for use with textWrap()
+# TEXT COLORS for unnecessary output aesthetics
 HEADER = '\033[95m'
 OKBLUE = '\033[94m'
 OKGREEN = '\033[92m'
@@ -27,8 +26,7 @@ UNDERLINE = '\033[4m'
 class SimShell(cmd.Cmd):
 
     intro   = 'simulation tool for bowser_sim'
-    prompt  = HEADER + '(Bowser)' + ENDC
-    file    = None  
+    prompt  = HEADER + '(Bowser)' + ENDC 
 
     def do_end(self, arg):
         'End the sim shell'
