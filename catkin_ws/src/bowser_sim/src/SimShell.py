@@ -33,6 +33,16 @@ class SimShell(cmd.Cmd):
 
         return True    
 
+    def do_new(self, arg):
+        """Opens another sim shell window
+        usage: new [# of windows]"""
+
+        if len(str(arg)) == 1:
+            for x in range(int(arg)):
+                subprocess.call(['gnome-terminal', '--','python','SimShell.py'], stderr=DEVNULL)    
+        elif len(str(arg)) == 0:        
+            subprocess.call(['gnome-terminal', '--','python','SimShell.py'], stderr=DEVNULL)    
+
     def do_reset(self, arg):
         'Reset simulation to start conditions'
 
@@ -44,6 +54,13 @@ class SimShell(cmd.Cmd):
         except rospy.ServiceException, e:
             print "Service call failed: %s"%e    
 
+    def do_drive(self, arg):
+        'Drive Bowser w/ arrow keys'
+         
+        print(OKBLUE + "Drive w/ the arrow keys" + ENDC)
+        print(WARNING + "Use ESC to exit" + ENDC)
+
+        subprocess.call(['python','drive.py'], stdout=DEVNULL, stderr=DEVNULL)
 
     def do_record(self, arg):
         """Record a topic\'s messages to a file

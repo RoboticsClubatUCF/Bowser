@@ -19,9 +19,9 @@ def on_press(key):
 		k = key.name
 
 	if( k == 'left' ):
-		twist.angular.z = 1
-	if( k == 'right' ):
 		twist.angular.z = -1
+	if( k == 'right' ):
+		twist.angular.z = 1
 	if( k == 'up' ):
 		twist.linear.x = -1
 	if( k == 'down' ):
