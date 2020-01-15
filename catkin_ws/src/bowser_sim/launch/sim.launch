@@ -13,7 +13,7 @@
 	<node pkg="bowser_sim" type="motor_conversion.py" name="motor_conversion" />
 
     <!-- opens the bowser_sim SimShell in a new terminal window -->
-    <node pkg="bowser_sim" type="SimShell.py" name="sim_shell" output="screen" launch-prefix="gnome-terminal -- "/>
+    <node pkg="bowser_sim" type="SimShell.py" name="sim_shell" output="screen" launch-prefix="gnome-terminal --"/>
 	
     <node pkg="tf" type="static_transform_publisher" name="lidar_tf" args="-.35 0 .2 0 0 3.14159 bowser/base_link bowser/velodyne_link 100" />
 
