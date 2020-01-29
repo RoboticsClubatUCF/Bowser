@@ -16,4 +16,8 @@ source ~/.bashrc
 
 sudo apt install -y python-rosinstall python-rosinstall-generator python-wstool build-essential
 
+# setting up gazebo paths
+echo "export GAZEBO_RESOURCE_PATH=/usr/share/gazebo-9:${GAZEBO_RESOURCE_PATH}" >> ~/.bashrc
+echo "export GAZEBO_PLUGIN_PATH=${GAZEBO_PLUGIN_PATH}:~/Bowser/catkin_ws/src/bowser_sim/plugins/velodyne_plugin/build:/home/wes/Bowser/catkin_ws/src/bowser_sim/plugins/velo_360_plugin/build/devel/lib" >> ~/.bashrc
+echo "export GAZEBO_MODEL_PATH=~/Bowser/catkin_ws/src/bowser_sim/models:~/Bowser/catkin_ws/src/bowser_sim/urdf:${GAZEBO_MODEL_PATH}" >> ~/.bashrc
 
