@@ -8,8 +8,7 @@
 import rospy, math, random
 import numpy as np
 import sensor_msgs.point_cloud2 as pc2
-from sensor_msgs.msg import PointCloud2, PointField
-from std_msgs.msg import Header
+from sensor_msgs.msg import PointCloud2
 
 class Lidar:
    
@@ -24,9 +23,11 @@ class Lidar:
 		iterable = [np.array([i[0], i[1], i[2]]) for i in self.xyz_generator]
 		# Create a numpy array out of the iterable
 		self.points = np.array(iterable)
-		self.dist = math.sqrt(pow(self.points[0][0], 2) + pow(self.points[0][1], 2) + pow(self.points[0][2], 2))
-		if self.dist < 2.0 or self.dist > 2.5:
-			print self.points[0]
+		for j in range(0, len(self.points)):
+			x = self.points[j][0] * self.points[j][0]
+			y = self.points[j][1] * self.points[j][1]
+			z = self.points[j][2] * self.points[j][2]
+			print(math.sqrt(x + y + z))
 
 class Map:
 
@@ -39,7 +40,7 @@ class Camera:
 		self.color = 0
 
 if __name__ == '__main__':
-	rospy.init_node("display", anonymous = False)
+	rospy.init_node("display", anonymous = False)	
 	lidar = Lidar()
 	occmap = Map()
 	rospy.spin()
