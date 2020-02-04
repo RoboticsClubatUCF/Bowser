@@ -15,6 +15,7 @@ echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 
 sudo apt install -y python-rosinstall python-rosinstall-generator python-wstool build-essential
+sudo apt-get install -y ros-melodic-hector-gazebo-plugins
 
 # setting up gazebo paths
 echo "export GAZEBO_RESOURCE_PATH=/usr/share/gazebo-9:\${GAZEBO_RESOURCE_PATH}" >> ~/.bashrc
