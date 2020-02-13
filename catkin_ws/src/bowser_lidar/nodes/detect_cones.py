@@ -12,7 +12,7 @@ import numpy as np
 
 class DetectCones:
 
-    # **Edit num and self.a later**
+    # **Edit later**
     def __init__(self, num):
         self.a = num
 
@@ -58,7 +58,7 @@ class DetectCones:
         print("----------------------------------------------------------")
 
 
-# **Edit DetectCones arguments later**
+# **Edit later**
 lidar = DetectCones(2.4)
 lidar.cone_calculations()
 
