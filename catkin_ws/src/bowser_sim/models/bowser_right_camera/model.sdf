@@ -1,0 +1,55 @@
+<?xml version='1.0'?>
+<sdf version="1.5">
+<model name="bowser_right_camera">
+
+<link name="link">
+	<gravity>false</gravity>
+	<inertial>
+		<mass>1</mass>
+		<inertia>
+			<ixx>50.0</ixx>
+		 	<ixy>0.0</ixy> 
+			<ixz>0.0</ixz> 
+			<iyy>50.0</iyy>
+			<iyz>0.0</iyz>
+			<izz>50.0</izz>
+		</inertia>
+	</inertial>
+	<visual name="camera_visual">
+		<geometry>
+			<box>
+				<size>0.1 0.1 .1</size>
+			</box>	
+		</geometry>
+	</visual>
+	<collision name="camera_collision">
+		<geometry>
+			<box>
+				<size>0.1 0.1 .1</size>
+			</box>	
+		</geometry>
+	</collision>
+	
+      <sensor type="camera" name="camera">
+        <plugin name="camera_plugin" filename="libgazebo_ros_camera.so">
+			<imageTopicName>/bowser/cam_right</imageTopicName>
+		</plugin>	
+        <camera>
+			<horizontal_fov>1.047</horizontal_fov>
+			<image>
+				<width>320</width>
+				<height>240</height>
+			</image>
+			<clip>
+				<near>0.1</near>
+				<far>100</far>
+			</clip>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>20</update_rate>
+        <visualize>false</visualize>
+      </sensor>
+    </link>
+
+  </model>
+</sdf>
