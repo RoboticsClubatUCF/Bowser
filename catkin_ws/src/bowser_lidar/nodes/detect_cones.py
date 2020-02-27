@@ -12,6 +12,20 @@ import numpy as np
 
 class DetectCones:
 
+    # This runs for every scan
+    def on_scan(self, cloud):
+        PointCloud2.angle_min = -1.5708
+        PointCloud2.angle_max = 1.5708
+        # Take in our x, y, z, values and store them in the generator
+        self.xyzi_generator = pc2.read_points(cloud, skip_nans=True, field_names=("x", "y", "z", "i"))
+        # Create an iterable array out of the generator
+        # 0 = x, 1 = y, 2 = z
+        iterable = [np.array([i[0], i[1], i[2], i[3]]) for i in self.xyzi_generator]
+        # Create a numpy array out of the iterable
+        self.points = np.array(iterable)
+        # Update the current scan counter
+        currScan += 1;
+
     # **Edit later**
     def __init__(self, num):
         self.a = num
@@ -25,6 +39,8 @@ class DetectCones:
 
         # Algorithm for calculating circle modified from:
         # https://stackoverflow.com/questions/20314306/find-arc-circle-equation-given-three-points-in-space-3d
+
+
 
         # Take normalized length of line between each two points
         a = np.linalg.norm(point3 - point2)

@@ -15,11 +15,13 @@ from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from sensor_msgs.msg import PointCloud2
+from geometry_msgs.msg import Point
+from std_msgs.msg import Float32MultiArray
 
 class Lidar:
 
 	# Scan counter
-	currScan = 0;
+	# currScan = 0;
 	
 	def __init__(self, scan_topic="velodyne_points"):
 		# Subscribe to the laser scan topic
@@ -28,21 +30,22 @@ class Lidar:
 		self.docka = 0
 		self.dockb = 0
 		self.dockmaxvotes = 0
+		self.currScan = 0
 	
 	# This runs for every scan
 	def on_scan(self, cloud):
 		PointCloud2.angle_min = -1.5708
 		PointCloud2.angle_max = 1.5708
 		# Take in our x, y, z, values and store them in the generator
-		self.xyz_generator = pc2.read_points(cloud, skip_nans=True, field_names=("x", "y", "z"))
+		self.xyzi_generator = pc2.read_points(cloud, skip_nans=True, field_names=("x", "y", "z", "intensity"))
 		# Create an iterable array out of the generator
-		iterable = [np.array([i[0], i[1], i[2]]) for i in self.xyz_generator]
+		iterable = [np.array([i[0], i[1], i[2], i[3]]) for i in self.xyzi_generator]
 		# Create a numpy array out of the iterable
 		self.points = np.array(iterable)
 		# Redisplay the window
 		glutPostRedisplay()
 		# Update the current scan counter
-		currScan += 1;
+		self.currScan += 1;
 
 	def initFun(self):
 		# Define clear color
@@ -150,6 +153,8 @@ class Lidar:
 			A = viable[i]
 			B = viable[i+1]
 			C = viable[i+2]
+			print str(A) + "  " + str(B) + "   " + str(C)
+			print "\n"
 
 			# Algorithm for calculating circle modified from:
 			# https://stackoverflow.com/questions/20314306/find-arc-circle-equation-given-three-points-in-space-3d
@@ -176,6 +181,7 @@ class Lidar:
 			glPointSize(3.0)
 			glBegin(GL_POINTS)
 			'''
+			consScans = 0
 			# If radius is within range, check for votes from other points
 			if radius > .2033 and radius < .2650:
 				# Count votes from all viable points
@@ -190,11 +196,11 @@ class Lidar:
 							glVertex3f(j[0],j[1],0)
 							# If there is a buoy, update consecutive scans w/ buoy counter
 							consScans += 1
-							tempScan = currScan;
+							tempScan = self.currScan;
 							
 							# If there scan isn't consecutive & there arent 3 consecutive scans, set 
 							# counter to 0
-							if (currScan != tempScan)
+							if (self.currScan != tempScan):
 								consScans = 0
 							# If the number of consecutive scans w/ buoy is 3, publish & reset
 							# num of buoy consecutive scans
@@ -203,34 +209,30 @@ class Lidar:
 								# put points in Point32[] 
  
 								#  Adding all the point x,y,z coord for point1
-								Point32 point1 = ros.Point32; 
+								point1 = Point()
 								point1.x = A[0]
 								point1.y = A[1]
 								point1.z = A[2]
 								
  								# Adding all the point x,y,z coord for point2
-								Point32 point2 = ros.Point32;
+								point2 = Point()
 								point2.x = B[0]
 								point2.y = B[1]
 								point2.z = B[2]
 								
 								# Adding all the point x,y,z coord for point3
-								Point32 point3 = ros.Point32;
+								point3 = Point()
 								point3.x = C[0]
 								point3.y = C[1]
 								point3.z = C[2]
 
+								objPointArrays = [point1, point2, point3]
+
 								# Creating a point obj of type point32
-								geometry_msgs/Point32[] points
-								
-								# Adding the points into the point object
-								points[0] = point1
-								points[1] = point2
-								points[2] = point3
-								
-								# Add the points into a pointcloud
-								pointcloud.points = points
-								
+								pointArray = Float32MultiArray()
+								pointArray.data = objPointArrays
+
+								# Tracks consecutive 
 								consScans = 0
 		# If scan count <= 30, reset scan count
 		if self.scancount <= 30:
@@ -270,6 +272,7 @@ class Camera:
 
 if __name__ == '__main__':
 	rospy.init_node("display", anonymous = False)
+	publishPoints = rospy.Publisher('/objects', Float32MultiArray, queue_size = 10)
 	lidar = Lidar()
 	occmap = Map()
 	glutInit()
