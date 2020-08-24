@@ -243,7 +243,7 @@
         <updateRate>10.0</updateRate> 
     </plugin>
 
-
+<!-- 
     <plugin name="gps_controller" filename="libhector_gazebo_ros_gps.so">
       <alwayson>true</alwayson>
       <updaterate>1.0</updaterate>
@@ -254,7 +254,7 @@
       <gaussiannoise>0.1 0.1 0.1</gaussiannoise>
       <velocitydrift>0 0 0</velocitydrift>
       <velocitygaussiannoise>0.1 0.1 0.1</velocitygaussiannoise>
-    </plugin>
+    </plugin> -->
 
 
     <!-- <gazebo reference="camera_link">
