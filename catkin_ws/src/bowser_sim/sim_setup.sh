@@ -1,29 +1,43 @@
-#!/bin/sh
-cd
-sudo apt install -y git
-git clone https://github.com/RoboticsClubatUCF/Bowser.git
+#!/bin/bash
 
-#setting up ROS
-sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
-sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
-sudo apt update
-sudo apt install -y ros-melodic-desktop-full
+# checking which version of ros is installed
+if [ "$ROS_DISTRO" == "melodic" ]
+then
+	# since we have melodic, install packages the normal way
 
-sudo rosdep init
-rosdep update
-echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
-source ~/.bashrc
+	echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
+	source ~/.bashrc	
+	# installing dependencies
+	sudo apt install -y ros-melodic-hector-gazebo-plugins
+	sudo apt install -y ros-melodic-gazebo-ros-pkgs
+	sudo apt install -y ros-melodic-rtabmap
+	sudo apt install -y ros-melodic-navigation
+elif [ "$ROS_DISTRO" == "noetic" ]
+then
+	# since we have noetic, install things the dumb way
+	echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
+	source ~/.bashrc	
 
-sudo apt install -y python-rosinstall python-rosinstall-generator python-wstool build-essential
-sudo apt-get install -y ros-melodic-hector-gazebo-plugins
+	cd ~/Bowser/catkin_ws/src
+	# installing dependencies from source (not technically supported for noetic)
+	git clone https://github.com/tu-darmstadt-ros-pkg/hector_gazebo.git
+	# installing dependencies from apt
+	sudo apt install -y ros-noetic-gazebo-ros-pkgs
+	sudo apt install -y ros-noetic-rtabmap
+	sudo apt install -y ros-noetic-navigation
+fi 
 
-# setting up gazebo paths
-echo "export GAZEBO_RESOURCE_PATH=/usr/share/gazebo-9:\${GAZEBO_RESOURCE_PATH}" >> ~/.bashrc
-echo "export GAZEBO_PLUGIN_PATH=${GAZEBO_PLUGIN_PATH}:~/Bowser/catkin_ws/src/bowser_sim/plugins/velodyne_plugin/build:~/Bowser/catkin_ws/src/bowser_sim/plugins/velo_360_plugin/build/devel/lib" >> ~/.bashrc
-echo "export GAZEBO_MODEL_PATH=~/Bowser/catkin_ws/src/bowser_sim/models:~/Bowser/catkin_ws/src/bowser_sim/urdf:${GAZEBO_MODEL_PATH}" >> ~/.bashrc
+# source our bowser workspace every time the terminal is opened
 echo "source ~/Bowser/catkin_ws/devel/setup.bash" >> ~/.bashrc
 
+# setting up gazebo paths
+# echo "export GAZEBO_RESOURCE_PATH=/usr/share/gazebo-9:\${GAZEBO_RESOURCE_PATH}" >> ~/.bashrc
+export GAZEBO_PLUGIN_PATH=:~/Bowser/catkin_ws/src/bowser_sim/plugins/velodyne_plugin/build:~/Bowser/catkin_ws/src/bowser_sim/plugins/velo_360_plugin/build/devel/lib
+export GAZEBO_MODEL_PATH=~/Bowser/catkin_ws/src/bowser_sim/models:~/Bowser/catkin_ws/src/bowser_sim/urdf:
+
 . ~/.bashrc
+
+# build our bowser workspace
 cd ~/Bowser/catkin_ws
 catkin_make
 
