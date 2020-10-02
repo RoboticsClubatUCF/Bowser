@@ -1,0 +1,259 @@
+<?xml version="1.0" ?>
+<robot name="bowser2">
+  <joint name="bowser2/front_left_joint" type="fixed">
+    <parent link="bowser2/base_link"/>
+    <child link="bowser2/front_left_wheel"/>
+    <origin xyz="-0.3  -0.37  0.45" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="0" upper="0" effort="0" velocity="0"/>
+  </joint>
+  <joint name="bowser2/front_right_joint" type="fixed">
+    <parent link="bowser2/base_link"/>
+    <child link="bowser2/front_right_wheel"/>
+    <origin xyz="-0.3   0.37  0.45" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="0" upper="0" effort="0" velocity="0"/>
+  </joint>
+  <joint name="bowser2/hdl32_joint" type="fixed">
+    <parent link="bowser2/base_link"/>
+    <child link="bowser2/bowser_hdl32/hdl32_base"/>
+    <origin xyz="-0.35     0       0.72933" rpy="0      0      3.14159"/>
+    <axis xyz="0 0 0"/>
+    <limit lower="0" upper="0" effort="0" velocity="0"/>
+  </joint>
+  <joint name="bowser2/depthcam_joint" type="fixed">
+    <parent link="bowser2/base_link"/>
+    <child link="bowser2/bowser_depthcam/dc_link"/>
+    <origin xyz="0     0     0.9548" rpy="1.5708      3.14159      -1.5708"/>
+    <axis xyz="0 0 0"/>
+    <limit lower="0" upper="0" effort="0" velocity="0"/>
+  </joint>
+  <!-- <joint name="bowser2/left_camera_joint" type="fixed">
+    <parent link="bowser2/base_link"/>
+    <child link="bowser2/bowser_left_camera/lc_link"/>
+    <origin xyz="0  0.3 0.6" rpy="0     0     1.5708"/>
+    <axis xyz="0 0 0"/>
+    <limit lower="0" upper="0" effort="0" velocity="0"/>
+  </joint>
+  <joint name="bowser2/right_camera_joint" type="fixed">
+    <parent link="bowser2/base_link"/>
+    <child link="bowser2/bowser_right_camera/rc_link"/>
+    <origin xyz="0  -0.3  0.6" rpy="0      0     -1.5708"/>
+    <axis xyz="0 0 0"/>
+    <limit lower="0" upper="0" effort="0" velocity="0"/>
+  </joint> -->
+  <link name="bowser2/base_link">
+    <inertial>
+      <mass value="10"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx=".3735" ixy="0.0" ixz="0.0" iyy=".747" iyz="0.0" izz=".9711"/>
+    </inertial>
+    <collision name="bowser2/collision">
+      <origin xyz="0  0  0.5" rpy="0 0 0"/>
+      <geometry>
+        <box size=".9 .6 .3"/>
+      </geometry>
+    </collision>
+    <collision name="bowser2/caster_collision">
+      <origin xyz="0.35 0   0.35" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius=".075"/>
+      </geometry>
+    </collision>
+    <visual name="bowser2/visual">
+      <origin xyz="0  0  0.5" rpy="0 0 0"/>
+      <geometry>
+        <box size=".9 .6 .3"/>
+      </geometry>
+    </visual>
+    <visual name="bowser2/caster_visual">
+      <origin xyz="0.35 0   0.35" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius=".075"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="bowser2/front_left_wheel">
+    <inertial>
+      <mass value="2.6357"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.0246688" ixy="0" ixz="0" iyy="0.0246688" iyz="0" izz="0.0441058"/>
+    </inertial>
+    <collision name="bowser2/front_left_wheel_collision">
+      <origin xyz="0 0 0" rpy="-1.5707  0      0"/>
+      <geometry>
+        <cylinder radius="0.17775" length="0.1143"/>
+      </geometry>
+    </collision>
+    <visual name="bowser2/front_left_wheel">
+      <origin xyz="0 0 0" rpy="-3.14159  0       0"/>
+      <geometry>
+        <mesh filename="package://bowser_sim/meshes/wheel.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="bowser2/front_right_wheel">
+    <inertial>
+      <mass value="2.6357"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.0246688" ixy="0" ixz="0" iyy="0.0246688" iyz="0" izz="0.0441058"/>
+    </inertial>
+    <collision name="bowser2/front_right_wheel_collision">
+      <origin xyz="0 0 0" rpy="-1.5707  0      0"/>
+      <geometry>
+        <cylinder radius="0.17775" length="0.1143"/>
+      </geometry>
+    </collision>
+    <visual name="bowser2/front_right_wheel">
+      <origin xyz="0 0 0" rpy="-3.14159  0       0"/>
+      <geometry>
+        <mesh filename="package://bowser_sim/meshes/wheel.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="bowser2/bowser_hdl32/joint" type="revolute">
+    <parent link="bowser2/bowser_hdl32/hdl32_base"/>
+    <child link="bowser2/bowser_hdl32/hdl32_top"/>
+    <origin xyz="0      0      0.02933" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1e+16" upper="1e+16" effort="0.0" velocity="0.0"/>
+  </joint>
+  <link name="bowser2/bowser_hdl32/hdl32_base">
+    <inertial>
+      <mass value="1.2"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.001087473" ixy="0" ixz="0" iyy="0.001087473" iyz="0" izz="0.001092437"/>
+    </inertial>
+    <collision name="bowser2/bowser_hdl32/base_collision">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius=".04267" length=".05867"/>
+      </geometry>
+    </collision>
+    <visual name="bowser2/bowser_hdl32/base_visual">
+      <origin xyz="0       0      -0.02933" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://bowser_sim/models/bowser_hdl32/meshes/velodyne_base.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="bowser2/bowser_hdl32/hdl32_top">
+    <inertial>
+      <mass value="0.1"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0.000090623" ixy="0" ixz="0" iyy="0.000090623" iyz="0" izz="0.000091036"/>
+    </inertial>
+    <collision name="bowser2/bowser_hdl32/top_collision">
+      <origin xyz="0      0      0.03678" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.04267" length="0.07357"/>
+      </geometry>
+    </collision>
+    <visual name="bowser2/bowser_hdl32/top_visual">
+      <origin xyz="0       0      -0.00089" rpy="0     0     1.5707"/>
+      <geometry>
+        <mesh filename="package://bowser_sim/models/bowser_hdl32/meshes/velodyne_top.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="bowser2/bowser_depthcam/dc_link">
+    <inertial>
+      <mass value="0.1"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+    <collision name="bowser2/bowser_depthcam/collision">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.073000 0.276000 0.072000"/>
+      </geometry>
+    </collision>
+    <visual name="bowser2/bowser_depthcam/visual">
+      <origin xyz="0 0 0" rpy="1.5708      3.14159      -1.5708"/>
+      <geometry>
+        <mesh filename="package://bowser_sim/models/bowser_depthcam/meshes/kinect.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <!-- <link name="bowser2/bowser_left_camera/lc_link">
+    <inertial>
+      <mass value="1"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx=".00166" ixy="0.0" ixz="0.0" iyy=".00166" iyz="0.0" izz=".00166"/>
+    </inertial>
+    <collision name="bowser2/bowser_left_camera/camera_collision">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+    <visual name="bowser2/bowser_left_camera/camera_visual">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="bowser2/bowser_right_camera/rc_link">
+    <inertial>
+      <mass value="1"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx=".00166" ixy="0.0" ixz="0.0" iyy=".00166" iyz="0.0" izz=".00166"/>
+    </inertial>
+    <collision name="bowser2/bowser_right_camera/camera_collision">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+    <visual name="bowser2/bowser_right_camera/camera_visual">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </visual>
+  </link> -->
+
+  <gazebo>
+    <plugin name="imu_plugin" filename="libgazebo_ros_imu.so">
+      <robotNamespace></robotNamespace>
+      <alwaysOn>true</alwaysOn>       
+      <bodyName>base_link</bodyName>
+      <topicName>/bowser/imu</topicName>
+      <serviceName>imu_service</serviceName>
+      <gaussianNoise>0.0</gaussianNoise>
+      <updateRate>10.0</updateRate> 
+    </plugin>
+
+    <plugin filename="libgazebo_ros_diff_drive.so" name="diff_drive_controller">
+      <robotNamespace></robotNamespace>
+      <alwaysOn>true</alwaysOn>
+      <updateRate>100</updateRate>
+
+      <leftJoint>front_left_joint</leftJoint>
+      <rightJoint>front_right_joint</rightJoint>
+      <wheelSeparation>0.74</wheelSeparation>
+      <wheelDiameter>0.3555</wheelDiameter>
+      <torque>20</torque>
+      <!-- <commandTopic>/bowser/diff_drive</commandTopic> -->
+      <commandTopic>/cmd_vel</commandTopic>
+      <odometryTopic>/odom</odometryTopic>
+      <odometryFrame>odom</odometryFrame>
+      <robotBaseFrame>base_link</robotBaseFrame>
+    </plugin>
+
+    <plugin name="gps_controller" filename="libhector_gazebo_ros_gps.so">
+      <alwayson>true</alwayson>
+      <updaterate>1.0</updaterate>
+      <bodyname>base_link</bodyname>
+      <topicname>/bowser/fix</topicname>
+      <velocitytopicname>/bowser/fix_velocity</velocitytopicname>
+      <drift>5.0 5.0 5.0</drift>
+      <gaussiannoise>0.1 0.1 0.1</gaussiannoise>
+      <velocitydrift>0 0 0</velocitydrift>
+      <velocitygaussiannoise>0.1 0.1 0.1</velocitygaussiannoise>
+    </plugin>
+  </gazebo>
+
+
+</robot>
