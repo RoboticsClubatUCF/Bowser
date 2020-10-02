@@ -11,7 +11,7 @@
     	<arg name="verbose" value="true"/>
 	</include>
 
-	<param name="robot_description" textfile="/home/wes/Bowser/catkin_ws/src/bowser_sim/models/bowser2/model.urdf" />
+	<param name="robot_description" textfile="~/Bowser/catkin_ws/src/bowser_sim/models/bowser2/model.urdf" />
 
 	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
 
