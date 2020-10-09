@@ -1,6 +1,5 @@
 <launch>
 
-
 	<include file="$(find gazebo_ros)/launch/empty_world.launch">
 		<arg name="world_name" value="$(find bowser_sim)/worlds/sim.world"/>
     	<arg name="paused" value="false"/>
@@ -11,7 +10,7 @@
     	<arg name="verbose" value="true"/>
 	</include>
 
-	<param name="robot_description" textfile="~/Bowser/catkin_ws/src/bowser_sim/models/bowser2/model.urdf" />
+	<param name="robot_description" textfile="$(find bowser_sim)/models/bowser2/model.urdf" />
 
 	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
 
