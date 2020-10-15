@@ -1,5 +1,7 @@
 # Lane Detection
 
+This is a temporary directory as to not disturb the other source files in the bowser_nav directory.
+
 ## Getting Ready
 ```bash
 $ git clone https://github.com/VijayStroup/Bowser.git && \
