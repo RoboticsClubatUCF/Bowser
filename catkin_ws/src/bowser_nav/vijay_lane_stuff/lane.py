@@ -56,16 +56,17 @@ class Feed:
     def show_image(self):
         """Show image and wait for keystroke."""
 
+        print('Press a key to exit, don\'t press the x on the window!')
         cv2.imshow('', self.image)
         cv2.waitKey()
         cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":
-    image_path = 'road1.jpg'
+    raw_feed = 'road1.jpg'
 
-    if os.path.isfile(image_path):
-        feed = Feed(image_path)
+    if os.path.isfile(raw_feed):
+        feed = Feed(raw_feed)
         feed.to_grey()
         feed.show_image()
     else:
