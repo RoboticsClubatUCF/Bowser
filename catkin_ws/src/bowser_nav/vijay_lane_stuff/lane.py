@@ -43,6 +43,9 @@ class Feed:
 
     """
 
+    BLACK = 0
+    WHITE = 255
+
     def __init__(self, image_path):
         self.image = cv2.imread(image_path)
 
@@ -53,6 +56,18 @@ class Feed:
 
         self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
 
+    def to_blur(self):
+        """We use a Gaussian Blur to smoothen hard edges that could give us
+        false positives on edges, but keep the very dramatic average change in
+        pixel values we need to see the lane markings."""
+
+        kernal = (5, 5)
+        deviation = 0
+
+        self.image = cv2.GaussianBlur(self.image, kernal, deviation)
+
+
+
     def show_image(self):
         """Show image and wait for keystroke."""
 
@@ -62,7 +77,7 @@ class Feed:
         cv2.destroyAllWindows()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     raw_feed = 'road1.jpg'
 
     if os.path.isfile(raw_feed):
