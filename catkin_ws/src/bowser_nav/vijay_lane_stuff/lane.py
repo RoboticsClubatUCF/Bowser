@@ -16,6 +16,7 @@ if __name__ == '__main__':
         feed.to_grey()
         feed.to_blur()
         feed.to_canny()
+        feed.roi()
         feed.show_image()
     else:
         print('Image does not exist.')

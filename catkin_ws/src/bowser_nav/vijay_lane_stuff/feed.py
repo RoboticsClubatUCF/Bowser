@@ -4,6 +4,7 @@ in order for Bowser to see lane markings.
 """
 
 import cv2
+import numpy as np
 
 
 class Feed:
@@ -28,8 +29,8 @@ class Feed:
 
     Examples
     --------
-    >>> import cv2, os
-    >>> from lane import Feed
+    >>> import cv2, numpy as np
+    >>> from feed import Feed
     >>> feed = Feed('image.jpg')
     >>> feed.show_image()
 
@@ -37,12 +38,15 @@ class Feed:
     ---------
     2020-10-15 Vijay Stroup created Feed class with show_image and to_grey
                methods.
-    2020-10-16 Vijay Stroup created to_blur and to_canny methods.
+    2020-10-16 Vijay Stroup created to_blur, to_canny, and roi methods.
 
     """
 
+    WHITE = 255
+
     def __init__(self, image_path):
         self.image = cv2.imread(image_path)
+        self.height, self.width, _ = self.image.shape
 
     def to_grey(self):
         """Convert the image to grey scale so our color channel will only be 1
@@ -82,15 +86,22 @@ class Feed:
 
         self.image = cv2.Canny(self.image, low_threshold, high_threshold)
 
-    def roi():
+    def roi(self):
         """The region of intrest allows us to only use part of the feed to
         preform manipulations on to improve effency. The region of intrest we
         care about for our cause is just the lane Bowser is in, not the other
         side of the lane or what is to it's far right or left.
         
+        Notes
+        -----
+        We use bitwise & with our mask and feed to only pick out the white that
+        is in both our mask and our feed.
+
         """
 
-        pass
+        mask = self.make_mask()
+
+        self.image = cv2.bitwise_and(self.image, mask)
 
     def show_image(self):
         """Show image and wait for keystroke."""
@@ -99,3 +110,23 @@ class Feed:
         cv2.imshow('', self.image)
         cv2.waitKey()
         cv2.destroyAllWindows()
+
+    def make_mask(self):
+        """To make a mask we define an array of points on our feed, and then on
+        our mask, we fill in the area of our mask by our points with white as
+        to use bitwise & on our mask and feed
+        
+        """
+
+        lower_left = (0, self.height)
+        lower_right = (self.width, self.height)
+        middle = (self.width / 2, self.height / 2)
+
+        points = np.array([
+            [lower_left, lower_right, middle]
+        ], dtype=np.int32)
+
+        mask = np.zeros_like(self.image)
+        cv2.fillPoly(mask, points, self.WHITE)
+
+        return mask
