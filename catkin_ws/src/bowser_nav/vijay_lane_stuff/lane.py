@@ -1,6 +1,6 @@
-"""Lane.py is responsible for the lane detection part of Bowser and will
+"""lane.py is responsible for the lane detection part of Bowser and will
 determine where the lanes are and also send signals to Bowser telling it
-whether it should move left or right to stay within the lines. 
+whether it should move left or right to stay within the lines.
 
 """
 
@@ -17,7 +17,8 @@ if __name__ == '__main__':
         feed.to_blur()
         feed.to_canny()
         feed.roi()
-        feed.show_image()
+        feed.get_lanes()
+        feed.show_lanes()
     else:
         print('Image does not exist.')
         exit(-1)

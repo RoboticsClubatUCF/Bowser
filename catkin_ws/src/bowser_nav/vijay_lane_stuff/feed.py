@@ -39,14 +39,18 @@ class Feed:
     2020-10-15 Vijay Stroup created Feed class with show_image and to_grey
                methods.
     2020-10-16 Vijay Stroup created to_blur, to_canny, and roi methods.
+    2020-10-19 Vijay Stroup created get_lanes and show_lanes methods.
 
     """
 
-    WHITE = 255
+    WHITE = (255, 255, 255)
+    BLUE = (255, 0, 0)
 
     def __init__(self, image_path):
         self.image = cv2.imread(image_path)
         self.height, self.width, _ = self.image.shape
+        self.image_copy = np.copy(self.image)
+        self.lanes = None
 
     def to_grey(self):
         """Convert the image to grey scale so our color channel will only be 1
@@ -103,18 +107,16 @@ class Feed:
 
         self.image = cv2.bitwise_and(self.image, mask)
 
-    def show_image(self):
-        """Show image and wait for keystroke."""
-
-        print('Press a key to exit, don\'t press the x on the window!')
-        cv2.imshow('', self.image)
-        cv2.waitKey()
-        cv2.destroyAllWindows()
-
     def make_mask(self):
         """To make a mask we define an array of points on our feed, and then on
         our mask, we fill in the area of our mask by our points with white as
-        to use bitwise & on our mask and feed
+        to use bitwise & on our mask and feed.
+
+        Returns
+        -------
+        mask: tuple
+            a black image with the same dimensions as the feed with white only
+            in our defined roi.
         
         """
 
@@ -130,3 +132,61 @@ class Feed:
         cv2.fillPoly(mask, points, self.WHITE)
 
         return mask
+
+    def get_lanes(self):
+        """The Hough Space will allow us to find intersectional points of the
+        different slopes from the Canny edge finder that will allow us to find
+        what might be a stright line.
+
+        Notes
+        -----
+        The Hough Space is a 2D array with the rows being theata in raidans and
+        rho as the columns.
+
+        """
+
+        rho = 2
+        theata = np.pi / 180
+        threshold = 100 # how many intersecting points must there to be
+                        # considered a stright line
+        lines = np.array([])
+        minLineLength = 40 # any lines detected that are less than 40px are
+                           # rejected
+        maxLineGap = 35 # max distance two detected lines can be a part from
+                        # each other and then combine
+
+        self.lanes = cv2.HoughLinesP(
+            self.image,
+            rho,
+            theata,
+            threshold,
+            lines,
+            minLineLength,
+            maxLineGap
+        )
+
+    def show_lanes(self):
+        """Show lanes on feed."""
+
+        lanes_image = np.zeros_like(self.image_copy)
+        
+        if self.lanes is not None:
+            for lane in self.lanes:
+                x1, y1, x2, y2 = lane.reshape(4)
+                cv2.line(lanes_image, (x1, y1), (x2, y2), self.BLUE, 5)
+
+        lanes_overlay = cv2.addWeighted(self.image_copy, .8, lanes_image, 1, 1)
+        # lanes_overlay = cv2.bitwise_or(self.image_copy, lanes_image)
+
+        print('Press a key to exit, don\'t press the x on the window!')
+        cv2.imshow('', lanes_overlay)
+        cv2.waitKey()
+        cv2.destroyAllWindows()
+
+    def show_image(self):
+        """Show image and wait for keystroke."""
+
+        print('Press a key to exit, don\'t press the x on the window!')
+        cv2.imshow('', self.image)
+        cv2.waitKey()
+        cv2.destroyAllWindows()
