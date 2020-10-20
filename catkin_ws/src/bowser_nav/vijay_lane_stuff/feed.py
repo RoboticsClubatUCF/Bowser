@@ -41,7 +41,9 @@ class Feed:
                methods.
     2020-10-16 Vijay Stroup created to_blur, to_canny, and roi methods.
     2020-10-19 Vijay Stroup created get_lanes and show_lanes methods.
-    2020-10-20 Vijay Stroup created robo_vis method.
+    2020-10-20 Vijay Stroup created robo_vis and make_lane_coords methods. He
+               also edited the get_lanes method to average out the lanes to get
+               one single right and left lane to make the lanes smoother.
 
     """
 
@@ -144,6 +146,10 @@ class Feed:
         -----
         The Hough Space is a 2D array with the rows being theata in raidans and
         rho as the columns.
+        When determing the slopes, the left lane would have a negative slope
+        whereas the right lane would have a positive slope.
+        After getting the Hough lines, we then average out the arrays in order
+        to form one single lane so the lane lines are not as choppy.
 
         """
 
@@ -157,7 +163,7 @@ class Feed:
         maxLineGap = 35 # max distance two detected lines can be a part from
                         # each other and then combine
 
-        self.lanes = cv2.HoughLinesP(
+        hough_lanes = cv2.HoughLinesP(
             self.image,
             rho,
             theata,
@@ -166,6 +172,58 @@ class Feed:
             minLineLength,
             maxLineGap
         )
+
+        left_hough = []
+        right_hough = []
+
+        if hough_lanes is not None:
+            # get the slopes and y-intercepts of each Hough Line
+            for lane in hough_lanes:
+                x1, y1, x2, y2 = lane.reshape(4)
+                slope, intercept = np.polyfit((x1, x2), (y1, y2), 1)
+                if slope < 0:
+                    left_hough.append((slope, intercept))
+                else:
+                    right_hough.append((slope, intercept))
+
+            # average out the left_hough and right_hough to form single lanes
+            left_average = np.average(left_hough, axis = 0)
+            right_average = np.average(right_hough, axis = 0)
+
+            # get coordinates of left and right average arrays
+            left_lane = self.make_lane_coords(left_average)
+            right_lane = self.make_lane_coords(right_average)
+            self.lanes = np.array([left_lane, right_lane])
+        else:
+            print('hough_lanes is None')
+            exit(-1)
+
+    def make_lane_coords(self, lane_average):
+        """Make coordinates for plotting the lanes from the hough lane
+        averages.
+        
+        Notes
+        -----
+        The image_height_ratio is how far up we will look in the feed. Example,
+        3 / 5 would be looking from the top.
+
+        Returns
+        -------
+        numpy array
+            an array that holds the coordinates of each of the lanes.
+
+        """
+
+        image_height_ratio = 3 / 5
+
+        slope, intercept = lane_average
+
+        y1 = self.image.shape[0]
+        y2 = int(y1 * image_height_ratio)
+        x1 = int((y1 - intercept) / slope)
+        x2 = int((y2 - intercept) / slope)
+
+        return np.array([x1, y1, x2, y2])
 
     def show_lanes(self):
         """Show lanes on feed.
@@ -179,7 +237,7 @@ class Feed:
         """
 
         lanes_image = np.zeros_like(self.image_copy)
-        
+
         if self.lanes is not None:
             for lane in self.lanes:
                 x1, y1, x2, y2 = lane.reshape(4)
