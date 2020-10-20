@@ -13,14 +13,10 @@ class Feed:
 
     Parameters
     ----------
-    image_path : string
-        Path to the feed 
-
-    Returns
-    -------
-    shows image
-        if you call the show_image method, the image will be shown and wait for
-        a keystroke to close.
+    raw_feed : string
+        Path to the feed
+    feed_type : string
+        Type of the feed (i.e. picture, video, stream, or camera)
 
     Notes
     -----
@@ -50,8 +46,10 @@ class Feed:
     WHITE = (255, 255, 255)
     BLUE = (255, 0, 0)
 
-    def __init__(self, image_path):
-        self.image = cv2.imread(image_path)
+    def __init__(self, raw_feed, feed_type):
+        self.feed_type = feed_type
+        if self.feed_type == 'picture': self.image = cv2.imread(raw_feed)
+        elif self.feed_type == 'video': self.image = raw_feed
         self.height, self.width, _ = self.image.shape
         self.image_copy = np.copy(self.image)
         self.lanes = None
@@ -60,7 +58,7 @@ class Feed:
         """Convert the image to grey scale so our color channel will only be 1
         with values ranging from 0 to 255 to make it faster and eaiser to
         determine change in intensity of pixel values.
-        
+
         """
 
         self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
@@ -69,7 +67,7 @@ class Feed:
         """We use a Gaussian Blur to smoothen hard edges that could give us
         false positives on edges, but keep the very dramatic average change in
         pixel values we need to see the lane markings.
-        
+
         """
 
         kernal = (5, 5)
@@ -86,7 +84,7 @@ class Feed:
         Notes
         -----
         The underlying function cv2.Canny() preforms a Gaussian Blur.
-        
+
         """
 
         low_threshold = 50
@@ -99,7 +97,7 @@ class Feed:
         preform manipulations on to improve effency. The region of intrest we
         care about for our cause is just the lane Bowser is in, not the other
         side of the lane or what is to it's far right or left.
-        
+
         Notes
         -----
         We use bitwise & with our mask and feed to only pick out the white that
@@ -121,7 +119,7 @@ class Feed:
         mask: tuple
             a black image with the same dimensions as the feed with white only
             in our defined roi.
-        
+
         """
 
         lower_left = (0, self.height)
@@ -201,7 +199,7 @@ class Feed:
     def make_lane_coords(self, lane_average):
         """Make coordinates for plotting the lanes from the hough lane
         averages.
-        
+
         Notes
         -----
         The image_height_ratio is how far up we will look in the feed. Example,
@@ -227,7 +225,12 @@ class Feed:
 
     def show_lanes(self):
         """Show lanes on feed.
-        
+
+        Returns
+        -------
+        -2 : int
+            return code to break out of loop
+
         Notes
         -----
         When preforming cv2.addWeighted, it is the same thing as doing
@@ -239,8 +242,7 @@ class Feed:
         lanes_image = np.zeros_like(self.image_copy)
 
         if self.lanes is not None:
-            for lane in self.lanes:
-                x1, y1, x2, y2 = lane.reshape(4)
+            for x1, y1, x2, y2 in self.lanes:
                 cv2.line(lanes_image, (x1, y1), (x2, y2), self.BLUE, 5)
 
         lanes_overlay = cv2.addWeighted(self.image_copy, .8, lanes_image, 1, 1)
@@ -248,7 +250,9 @@ class Feed:
 
         print('Press a key to exit, don\'t press the x on the window!')
         cv2.imshow('', lanes_overlay)
-        cv2.waitKey()
+        if self.feed_type == 'image': cv2.waitKey()
+        elif self.feed_type == 'video':
+            if cv2.waitKey(1000) & 0xFF == ord('q'): return -2
         cv2.destroyAllWindows()
 
     def show_image(self):
@@ -258,7 +262,7 @@ class Feed:
         cv2.imshow('', self.image)
         cv2.waitKey()
         cv2.destroyAllWindows()
-    
+
     def robo_vis(self):
         """Call other methods to transform feed for Bowser."""
 
