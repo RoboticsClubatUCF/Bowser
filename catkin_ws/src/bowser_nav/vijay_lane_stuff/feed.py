@@ -16,7 +16,7 @@ class Feed:
     raw_feed : string
         Path to the feed
     feed_type : string
-        Type of the feed (i.e. picture, video, stream, or camera)
+        Type of the feed (i.e. image, video, stream, or camera)
 
     Notes
     -----
@@ -48,10 +48,10 @@ class Feed:
 
     def __init__(self, raw_feed, feed_type):
         self.feed_type = feed_type
-        if self.feed_type == 'picture': self.image = cv2.imread(raw_feed)
-        elif self.feed_type == 'video': self.image = raw_feed
-        self.height, self.width, _ = self.image.shape
-        self.image_copy = np.copy(self.image)
+        if self.feed_type == 'image': self.feed = cv2.imread(raw_feed)
+        elif self.feed_type == 'video': self.feed = raw_feed
+        self.height, self.width, _ = self.feed.shape
+        self.feed_copy = np.copy(self.feed)
         self.lanes = None
 
     def to_grey(self):
@@ -61,7 +61,7 @@ class Feed:
 
         """
 
-        self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
+        self.feed = cv2.cvtColor(self.feed, cv2.COLOR_BGR2GRAY)
 
     def to_blur(self):
         """We use a Gaussian Blur to smoothen hard edges that could give us
@@ -73,7 +73,7 @@ class Feed:
         kernal = (5, 5)
         deviation = 0
 
-        self.image = cv2.GaussianBlur(self.image, kernal, deviation)
+        self.feed = cv2.GaussianBlur(self.feed, kernal, deviation)
 
     def to_canny(self):
         """Canny determines the relative intensity in pixel values within a
@@ -90,7 +90,7 @@ class Feed:
         low_threshold = 50
         high_threshold = 150
 
-        self.image = cv2.Canny(self.image, low_threshold, high_threshold)
+        self.feed = cv2.Canny(self.feed, low_threshold, high_threshold)
 
     def roi(self):
         """The region of intrest allows us to only use part of the feed to
@@ -107,7 +107,7 @@ class Feed:
 
         mask = self.make_mask()
 
-        self.image = cv2.bitwise_and(self.image, mask)
+        self.feed = cv2.bitwise_and(self.feed, mask)
 
     def make_mask(self):
         """To make a mask we define an array of points on our feed, and then on
@@ -130,7 +130,7 @@ class Feed:
             [lower_left, lower_right, middle]
         ], dtype=np.int32)
 
-        mask = np.zeros_like(self.image)
+        mask = np.zeros_like(self.feed)
         cv2.fillPoly(mask, points, self.WHITE)
 
         return mask
@@ -162,7 +162,7 @@ class Feed:
                         # each other and then combine
 
         hough_lanes = cv2.HoughLinesP(
-            self.image,
+            self.feed,
             rho,
             theata,
             threshold,
@@ -216,7 +216,7 @@ class Feed:
 
         slope, intercept = lane_average
 
-        y1 = self.image.shape[0]
+        y1 = self.feed.shape[0]
         y2 = int(y1 * image_height_ratio)
         x1 = int((y1 - intercept) / slope)
         x2 = int((y2 - intercept) / slope)
@@ -239,14 +239,14 @@ class Feed:
 
         """
 
-        lanes_image = np.zeros_like(self.image_copy)
+        lanes_image = np.zeros_like(self.feed_copy)
 
         if self.lanes is not None:
             for x1, y1, x2, y2 in self.lanes:
                 cv2.line(lanes_image, (x1, y1), (x2, y2), self.BLUE, 5)
 
-        lanes_overlay = cv2.addWeighted(self.image_copy, .8, lanes_image, 1, 1)
-        # lanes_overlay = cv2.bitwise_or(self.image_copy, lanes_image)
+        lanes_overlay = cv2.addWeighted(self.feed_copy, .8, lanes_image, 1, 1)
+        # lanes_overlay = cv2.bitwise_or(self.feed_copy, lanes_image)
 
         print('Press a key to exit, don\'t press the x on the window!')
         cv2.imshow('', lanes_overlay)
@@ -259,7 +259,7 @@ class Feed:
         """Show image and wait for keystroke."""
 
         print('Press a key to exit, don\'t press the x on the window!')
-        cv2.imshow('', self.image)
+        cv2.imshow('', self.feed)
         cv2.waitKey()
         cv2.destroyAllWindows()
 

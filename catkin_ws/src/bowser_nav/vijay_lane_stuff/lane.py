@@ -10,24 +10,21 @@ from feed import Feed
 
 
 if __name__ == '__main__':
-    feed_types = ['image', 'video', 'stream', 'camera']
-
-    raw_feed = 'road2.mp4'
-    raw_feed_type = feed_types[1]
+    raw_feed = 'road1.jpg'
 
     if not os.path.isfile(raw_feed):
         print('feed does not exist.')
         exit(-1)
 
-    if raw_feed_type == feed_types[0]: # image
-        feed = Feed(raw_feed, raw_feed_type)
+    if raw_feed[-3:] == 'jpg': # image
+        feed = Feed(raw_feed, 'image')
         feed.robo_vis()
         feed.show_lanes()
-    elif raw_feed_type == feed_types[1]: # video
+    elif raw_feed[-3:] == 'mp4': # video
         cap = cv2.VideoCapture(raw_feed)
         while(cap.isOpened()):
             _, frame = cap.read()
-            feed = Feed(frame, raw_feed_type)
+            feed = Feed(frame, 'video')
             feed.robo_vis()
             if feed.show_lanes() == -2: break
     elif raw_feed_type == feed_types[2]: # stream
