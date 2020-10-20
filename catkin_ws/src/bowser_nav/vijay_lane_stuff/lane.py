@@ -13,11 +13,7 @@ if __name__ == '__main__':
 
     if os.path.isfile(raw_feed):
         feed = Feed(raw_feed)
-        feed.to_grey()
-        feed.to_blur()
-        feed.to_canny()
-        feed.roi()
-        feed.get_lanes()
+        feed.robo_vis()
         feed.show_lanes()
     else:
         print('Image does not exist.')

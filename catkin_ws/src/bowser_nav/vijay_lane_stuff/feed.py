@@ -32,7 +32,8 @@ class Feed:
     >>> import cv2, numpy as np
     >>> from feed import Feed
     >>> feed = Feed('image.jpg')
-    >>> feed.show_image()
+    >>> feed.robo_vis()
+    >>> feed.show_lanes()
 
     Revisions
     ---------
@@ -40,6 +41,7 @@ class Feed:
                methods.
     2020-10-16 Vijay Stroup created to_blur, to_canny, and roi methods.
     2020-10-19 Vijay Stroup created get_lanes and show_lanes methods.
+    2020-10-20 Vijay Stroup created robo_vis method.
 
     """
 
@@ -166,7 +168,15 @@ class Feed:
         )
 
     def show_lanes(self):
-        """Show lanes on feed."""
+        """Show lanes on feed.
+        
+        Notes
+        -----
+        When preforming cv2.addWeighted, it is the same thing as doing
+        cv2.bitwise_or on the two images. The weighted just lets us see the
+        lanes better as it will be more prominent.
+
+        """
 
         lanes_image = np.zeros_like(self.image_copy)
         
@@ -190,3 +200,13 @@ class Feed:
         cv2.imshow('', self.image)
         cv2.waitKey()
         cv2.destroyAllWindows()
+    
+    def robo_vis(self):
+        """Call other methods to transform feed for Bowser."""
+
+        self.to_grey()
+        self.to_blur()
+        self.to_canny()
+        self.roi()
+        self.roi()
+        self.get_lanes()
