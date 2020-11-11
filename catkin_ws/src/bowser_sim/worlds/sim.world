@@ -2,14 +2,15 @@
 <sdf version="1.4">
   <world name="default">
     <include>
-      <uri>model://ground_plane</uri>
+      <uri>model://course_plane</uri>
     </include>
     <include>
       <uri>model://sun</uri>
     </include>
     <include>
       <uri>model://bowser2</uri>
-      <pose>0 0 .3 0 0 0</pose>
+      <!-- pose that places bowser right in between two white lines on the plane -->
+      <pose>-15.46 6.374 .23 0 0.004243 -1.169</pose>
     </include>
   </world>
 </sdf>

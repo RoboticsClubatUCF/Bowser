@@ -214,6 +214,7 @@
     </visual>
   </link> -->
 
+  <!-- gazebo tag needed for urdf to work in gazebo -->
   <gazebo>
     <plugin name="imu_plugin" filename="libgazebo_ros_imu.so">
       <robotNamespace></robotNamespace>
@@ -225,23 +226,23 @@
       <updateRate>10.0</updateRate> 
     </plugin>
 
+    <!-- controls the base of the robot, uses command topic /cmd_vel -->
     <plugin filename="libgazebo_ros_diff_drive.so" name="diff_drive_controller">
       <robotNamespace></robotNamespace>
       <alwaysOn>true</alwaysOn>
       <updateRate>100</updateRate>
-
       <leftJoint>front_left_joint</leftJoint>
       <rightJoint>front_right_joint</rightJoint>
       <wheelSeparation>0.74</wheelSeparation>
       <wheelDiameter>0.3555</wheelDiameter>
       <torque>20</torque>
-      <!-- <commandTopic>/bowser/diff_drive</commandTopic> -->
       <commandTopic>/cmd_vel</commandTopic>
       <odometryTopic>/odom</odometryTopic>
       <odometryFrame>odom</odometryFrame>
       <robotBaseFrame>base_link</robotBaseFrame>
     </plugin>
 
+    <!-- creates fake gps fix for simulation -->
     <plugin name="gps_controller" filename="libhector_gazebo_ros_gps.so">
       <alwayson>true</alwayson>
       <updaterate>1.0</updaterate>
