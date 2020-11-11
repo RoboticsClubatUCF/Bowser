@@ -149,12 +149,12 @@
         <cylinder radius="0.04267" length="0.07357"/>
       </geometry>
     </collision>
-    <visual name="bowser2/bowser_hdl32/top_visual">
+    <!-- <visual name="bowser2/bowser_hdl32/top_visual">
       <origin xyz="0       0      -0.00089" rpy="0     0     1.5707"/>
       <geometry>
         <mesh filename="package://bowser_sim/models/bowser_hdl32/meshes/velodyne_top.dae" scale="1.0 1.0 1.0"/>
       </geometry>
-    </visual>
+    </visual> -->
   </link>
   <link name="bowser2/bowser_depthcam/dc_link">
     <inertial>

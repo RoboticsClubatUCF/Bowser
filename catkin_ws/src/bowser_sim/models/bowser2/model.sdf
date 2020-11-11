@@ -233,7 +233,7 @@
 
   <include>
     <uri>model://bowser_depthcam</uri>
-    <pose> 0 0 .4548 0 0 3.14159</pose>
+    <pose> 0 0 .7 0 0 3.14159</pose>
   </include>
   <joint name="depthcam_joint" type="fixed">
     <parent>base_link</parent>

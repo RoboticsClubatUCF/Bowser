@@ -56,14 +56,14 @@
           </cylinder>
         </geometry>
       </collision>
-      <visual name="top_visual">
+   <!--    <visual name="top_visual">
         <pose>0 0 -0.0376785 0 0 1.5707</pose>
         <geometry>
           <mesh>
             <uri>model://bowser_hdl32/meshes/velodyne_top.dae</uri>
           </mesh>
         </geometry>
-      </visual>
+      </visual> -->
 
       <sensor type="ray" name="sensor">
         <pose>0 0 -0.004645 0 0 0</pose>
