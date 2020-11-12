@@ -2,26 +2,30 @@
 
     <param name="/use_sim_time" value="true" />
 
+    <!-- launching gazebo-ros, which is just gazebo with ros integrated -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
         <arg name="world_name" value="$(find bowser_sim)/worlds/sim.world"/>
         <arg name="paused" value="false"/>
         <arg name="use_sim_time" value="true"/>
         <arg name="gui" value="true"/>
-        <arg name="recording" value="false"/>
+        <arg name="recording" value="false"/> 
         <arg name="debug" value="false"/>
         <arg name="verbose" value="true"/>
     </include>
 
-    <!-- <node pkg="bowser_sim" type="motor_conversion.py" name="motor_conversion" /> -->
-
+    <!-- load robot description to param server -->
     <param name="robot_description" textfile="$(find bowser_sim)/models/bowser2/model.urdf" />
 
+    <!-- publish robot tf tree -->
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
 
+    <!-- publishes tf transforms between joints -->
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
 
+    <!-- launches rviz, obviously -->
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find bowser_sim)/rviz/default.rviz"/>
 
+    <!-- starts up ROS Navigation stack -->
     <!-- <include file="$(find bowser_2dnav)/launch/nav.launch"/> -->
 
 </launch>
