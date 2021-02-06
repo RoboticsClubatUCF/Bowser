@@ -47,7 +47,7 @@
           <imageTopicName>/depth_camera/color/image_raw</imageTopicName>
           <cameraInfoTopicName>/depth_camera/color/camera_info</cameraInfoTopicName>
           <depthImageTopicName>/depth_camera/depth/image_raw</depthImageTopicName>
-          <depthImageCameraInfoTopicName>bowser/depth_camera/depth/camera_info</depthImageCameraInfoTopicName>
+          <depthImageCameraInfoTopicName>/depth_camera/depth/camera_info</depthImageCameraInfoTopicName>
           <pointCloudTopicName>/depth_camera/depth/points</pointCloudTopicName>
           <frameName>bowser_depthcam/dc_link</frameName>
           <pointCloudCutoff>.5</pointCloudCutoff>

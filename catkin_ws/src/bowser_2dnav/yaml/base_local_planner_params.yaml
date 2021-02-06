@@ -9,3 +9,5 @@ TrajectoryPlannerROS:
   acc_lim_y: 2.5
 
   holonomic_robot: true
+
+# from: http://wiki.ros.org/navigation/Tutorials/RobotSetup 

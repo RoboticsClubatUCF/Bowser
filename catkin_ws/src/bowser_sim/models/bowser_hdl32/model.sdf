@@ -56,14 +56,14 @@
           </cylinder>
         </geometry>
       </collision>
-   <!--    <visual name="top_visual">
+      <visual name="top_visual">
         <pose>0 0 -0.0376785 0 0 1.5707</pose>
         <geometry>
           <mesh>
             <uri>model://bowser_hdl32/meshes/velodyne_top.dae</uri>
           </mesh>
         </geometry>
-      </visual> -->
+      </visual>
 
       <sensor type="ray" name="sensor">
         <pose>0 0 -0.004645 0 0 0</pose>
@@ -75,13 +75,12 @@
             <mean>0.0</mean>
             <stddev>0.1</stddev>
           </noise>
-
           <scan>
             <vertical>
               <samples>32</samples>
               <resolution>1</resolution>
-              <min_angle>-3.14159</min_angle>
-              <max_angle>3.14159</max_angle>
+              <min_angle>-.7</min_angle>
+              <max_angle>.1</max_angle>
             </vertical>
             <horizontal>
                 <samples>256</samples>
@@ -92,17 +91,16 @@
                 <max_angle>3.14159</max_angle>
             </horizontal>
           </scan>
-
           <range>
-            <min>0.1</min>
+            <min>0.7</min>
             <max>10</max>
             <resolution>0.02</resolution>
           </range>
         </ray>
         <plugin name="laser" filename="libgazebo_ros_velodyne_laser.so">
             <robotNamespace></robotNamespace>
-            <topicName>/cloud_in</topicName>
-	        	<!-- <topicName>/bowser/velodyne</topicName> -->
+            <!-- <topicName>/velodyne</topicName> -->
+	        	<topicName>/bowser/velodyne</topicName>
 		        <!-- <frameName>velodyne_link</frameName> -->
             <frameName>bowser2/bowser_hdl32/hdl32_top</frameName>
 	      </plugin>

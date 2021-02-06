@@ -1,10 +1,18 @@
 <launch>
 
+    <arg name="rviz" default="true"/>
+    <arg name="nav" default="true" />
+    <arg name="sdf2urdf" default="false" />
+
     <param name="/use_sim_time" value="true" />
+
+    <!-- generate bowser2.urdf from bowser2.sdf to make sure rviz and gazebo are seeing the same model without having to edit both files-->
+    <!-- this functionality is based off a version of a git repo that isn't checked in, so you probably don't need it-->
+    <node if="$(arg sdf2urdf)" name="sdf2urdf" pkg="pysdf" type="sdf2urdf.py" args="$(find bowser_sim)/models/bowser2/model.sdf $(find bowser_sim)/models/bowser2/model.urdf" />
 
     <!-- launching gazebo-ros, which is just gazebo with ros integrated -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
-        <arg name="world_name" value="$(find bowser_sim)/worlds/sim.world"/>
+        <arg name="world_name" value="$(find bowser_sim)/worlds/sim.world"/>    <!-- using custom sim.world that auto-spawns robot model, cones, ground plane -->
         <arg name="paused" value="false"/>
         <arg name="use_sim_time" value="true"/>
         <arg name="gui" value="true"/>
@@ -23,9 +31,11 @@
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
 
     <!-- launches rviz, obviously -->
-    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find bowser_sim)/rviz/default.rviz"/>
+    <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(find bowser_sim)/rviz/default.rviz"/>
 
     <!-- starts up ROS Navigation stack -->
-    <!-- <include file="$(find bowser_2dnav)/launch/nav.launch"/> -->
+    <include if="$(arg nav)" file="$(find bowser_2dnav)/launch/nav.launch">
+        <arg name="move_base" value="true" />
+    </include>
 
 </launch>
