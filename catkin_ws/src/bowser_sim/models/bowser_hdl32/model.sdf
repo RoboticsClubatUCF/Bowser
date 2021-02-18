@@ -68,7 +68,7 @@
       <sensor type="ray" name="sensor">
         <pose>0 0 -0.004645 0 0 0</pose>
         <visualize>false</visualize>
-        <update_rate>30</update_rate>
+        <update_rate>60</update_rate>
         <ray>
           <noise>
             <type>gaussian</type>
@@ -79,11 +79,11 @@
             <vertical>
               <samples>32</samples>
               <resolution>1</resolution>
-              <min_angle>-.7</min_angle>
+              <min_angle>-.6</min_angle>
               <max_angle>.1</max_angle>
             </vertical>
             <horizontal>
-                <samples>256</samples>
+                <samples>128</samples>
                 <resolution>1</resolution>
                 <!-- <min_angle>-.2617993878</min_angle>
                 <max_angle>.2617993878</max_angle> -->

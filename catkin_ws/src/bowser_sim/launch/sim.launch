@@ -1,8 +1,10 @@
 <launch>
 
-    <arg name="rviz" default="true"/>
-    <arg name="nav" default="true" />
-    <arg name="sdf2urdf" default="false" />
+    <arg name="rviz" default="true"/>   <!-- use rviz window for robot information -->
+    <arg name="nav" default="true" />   <!-- launch the Nav. Stack with bowser_2dnav-->
+    <arg name="move_base" default="true"/>  <!-- run RTAB-Map w/ or w/out move_base -->
+    <arg name="sdf2urdf" default="false" /> <!-- wes only: convert new robot urdf to sdf (NEW SDF GETS LOADED ON NEXT LAUNCH), keep this OFF if you don't have sdf2urdf pkg -->
+    <arg name="gazebo" default="false" />   <!-- launch the full Gazebo gui window (resource intensive)-->
 
     <param name="/use_sim_time" value="true" />
 
@@ -15,13 +17,13 @@
         <arg name="world_name" value="$(find bowser_sim)/worlds/sim.world"/>    <!-- using custom sim.world that auto-spawns robot model, cones, ground plane -->
         <arg name="paused" value="false"/>
         <arg name="use_sim_time" value="true"/>
-        <arg name="gui" value="true"/>
+        <arg name="gui" value="$(arg gazebo)"/> <!-- only launch the GUI if arg gazebo is true-->
         <arg name="recording" value="false"/> 
         <arg name="debug" value="false"/>
         <arg name="verbose" value="true"/>
     </include>
 
-    <!-- load robot description to param server -->
+    <!-- load robot description to parameter server -->
     <param name="robot_description" textfile="$(find bowser_sim)/models/bowser2/model.urdf" />
 
     <!-- publish robot tf tree -->
@@ -33,9 +35,9 @@
     <!-- launches rviz, obviously -->
     <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(find bowser_sim)/rviz/default.rviz"/>
 
-    <!-- starts up ROS Navigation stack -->
+    <!-- starts up ROS Navigation stack (using bowser_2dnav launch file) -->
     <include if="$(arg nav)" file="$(find bowser_2dnav)/launch/nav.launch">
-        <arg name="move_base" value="true" />
+        <arg name="move_base" value="$(arg move_base)" />
     </include>
 
 </launch>

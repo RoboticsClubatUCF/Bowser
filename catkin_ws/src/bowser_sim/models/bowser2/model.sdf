@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <sdf version="1.5">
 <model name="bowser2">
-  <pose>0 0 .5 0 0 0</pose>
+  <pose>0 0 0 0 0 0</pose>
 <!--   <xacro:property name="x" value=".9"/>
   <xacro:property name="y" value=".6"/>
   <xacro:property name="z" value=".3"/>
@@ -197,7 +197,7 @@
 
   <include>
     <uri>model://bowser_hdl32</uri>
-    <pose> 0 0 .7 0 0 3.14159 </pose>
+    <pose> 0 0 .4 0 0 3.14159 </pose>
   </include>	
   <joint name="hdl32_joint" type="fixed">
   	<parent>base_link</parent>
@@ -233,7 +233,7 @@
 
   <include>
     <uri>model://bowser_depthcam</uri>
-    <pose> -.35 0 .2 0 0 3.14159</pose>
+    <pose> -.35 0 .2 0 0 -3.14159</pose>
   </include>
   <joint name="depthcam_joint" type="fixed">
     <parent>base_link</parent>

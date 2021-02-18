@@ -1,11 +1,38 @@
-obstacle_range: 5.0
-raytrace_range: 3.0
+obstacle_range: 5
+raytrace_range: 5
 footprint: [[0.45,-0.41], [0.45,0.41], [-0.45,0.41], [-0.45,-0.41]]
-inflation_radius: 0.40
+footprint_padding: 0.03
+inflation_radius: 0.3
+transform_tolerance: 1
+max_obstacle_height: 9999.9999
+min_obstacle_height: .4
 
-observation_sources: point_cloud_sensor1 
+observation_sources: point_cloud_obstacles point_cloud_ground
 
-point_cloud_sensor1: {sensor_frame: bowser2/bowser_hdl32/hdl32_top, data_type: PointCloud2, topic: /rtabmap/cloud_obstacles, marking: true, clearing: false}
-# point_cloud_sensor2: {sensor_frame: bowser2/bowser_hdl32/hdl32_top, data_type: PointCloud2, topic: /rtabmap/cloud_map, marking: true, clearing: true}
+# point_cloud_sensor1: {
+#     sensor_frame: bowser2/bowser_depthcam/dc_link, 
+#     data_type: PointCloud2, 
+#     topic: depth_camera/depth/points, 
+#     marking: true, 
+#     clearing: true
+#   }
+
+# this is a temp solution
+# don't think it's sound to feed RTAB-Map back to move_base like this
+point_cloud_obstacles: {
+    sensor_frame: bowser2/bowser_depthcam/dc_link, 
+    data_type: PointCloud2, 
+    topic: rtabmap/cloud_obstacles, 
+    marking: true, 
+    clearing: true
+  }  
+
+point_cloud_ground: {
+    sensor_frame: bowser2/bowser_depthcam/dc_link, 
+    data_type: PointCloud2, 
+    topic: rtabmap/cloud_ground, 
+    marking: false, 
+    clearing: true
+  }
 
 # from: http://wiki.ros.org/navigation/Tutorials/RobotSetup 
