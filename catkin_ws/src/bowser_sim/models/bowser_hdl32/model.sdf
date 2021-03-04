@@ -3,7 +3,6 @@
   <model name="bowser_hdl32">
     <gravity>false</gravity>
     <link name="hdl32_base">
-      <!-- <gravity>false</gravity>     -->
       <pose>0 0 0.029335 0 0 0</pose>
       <inertial>
         <mass>1.2</mass>
@@ -85,8 +84,6 @@
             <horizontal>
                 <samples>128</samples>
                 <resolution>1</resolution>
-                <!-- <min_angle>-.2617993878</min_angle>
-                <max_angle>.2617993878</max_angle> -->
                 <min_angle>-3.14159</min_angle>
                 <max_angle>3.14159</max_angle>
             </horizontal>
