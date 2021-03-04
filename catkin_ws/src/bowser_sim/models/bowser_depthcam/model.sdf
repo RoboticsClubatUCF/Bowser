@@ -2,7 +2,8 @@
 <sdf version="1.5">
   <model name="bowser_depthcam">
     <gravity>false</gravity>
-    <!-- <pose>0 0 0.036 0 0 0</pose> -->
+    <!-- this pose tag sets orientation of the tf frame i.e. how the image appears in rviz -->
+    <pose>0 0 0.036 -1.5708 0 -1.5708</pose>
     <link name="dc_link">
       <inertial>
         <mass>0.1</mass>
@@ -22,7 +23,7 @@
         </geometry>
       </visual>
       <sensor name="camera" type="depth">
-        <update_rate>20</update_rate>
+        <update_rate>40</update_rate>
         <camera>
           <horizontal_fov>1.047198</horizontal_fov>
           <image>
@@ -38,7 +39,7 @@
 
         <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
           <robotNamespace></robotNamespace>
-          <baseline>0.2</baseline>
+          <baseline>0.0</baseline>
           <alwaysOn>true</alwaysOn>
           <!-- Keep this zero, update_rate in the parent <sensor> tag
             will control the frame rate. -->
@@ -47,10 +48,10 @@
           <imageTopicName>/depth_camera/color/image_raw</imageTopicName>
           <cameraInfoTopicName>/depth_camera/color/camera_info</cameraInfoTopicName>
           <depthImageTopicName>/depth_camera/depth/image_raw</depthImageTopicName>
-          <depthImageCameraInfoTopicName>bowser/depth_camera/depth/camera_info</depthImageCameraInfoTopicName>
+          <depthImageCameraInfoTopicName>/depth_camera/depth/camera_info</depthImageCameraInfoTopicName>
           <pointCloudTopicName>/depth_camera/depth/points</pointCloudTopicName>
           <frameName>bowser_depthcam/dc_link</frameName>
-          <pointCloudCutoff>.5</pointCloudCutoff>
+          <pointCloudCutoff>0</pointCloudCutoff>
           <pointCloudCutoffMax>10.0</pointCloudCutoffMax>
           <distortionK1>0</distortionK1>
           <distortionK2>0</distortionK2>
